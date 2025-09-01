@@ -1,0 +1,17 @@
+.my-flix {
+  color: #4682b4;
+  text-align: center;
+  background-color: #d7e4ef;
+  border: 2px solid #4682b4;
+  border-radius: 5px;
+  width: 300px;
+  margin: 20px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.my-flix h1 {
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+/*# sourceMappingURL=myFlix_client.9f367d21.css.map */
