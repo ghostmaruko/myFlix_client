@@ -1,17 +1,103 @@
-$color: steelblue;
+.main-view {
+  display: grid;
+  background-color: #c9c9c9;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonne uguali */
+  gap: 20px; /* spazio tra le card */
+  justify-content: center; /* centra la griglia orizzontalmente */
+  padding: 40px;
+}
 
-.my-flix {
-  color: $color;
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 10px;
-  border: 2px solid $color;
-  width: 300px;
-  border-radius: 5px;
-  background-color: lighten($color, 40%);
+/* Stile per ogni MovieCard */
+.movie-card {
+  position: relative; /* necessario per overlay */
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-  }
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Immagine del film */
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.movie-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Titolo overlay in basso */
+.movie-card h3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  padding: 5px;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.movie-card:hover h3 {
+  opacity: 1;
+}
+
+/* MovieView (dettaglio singolo film) */
+.movie-view {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #cecece;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.movie-view img {
+  width: 300px;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.movie-view h2 {
+  margin-bottom: 15px;
+}
+
+.movie-view p {
+  margin: 5px 0;
+}
+
+.movie-view button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.movie-view button:hover {
+  background-color: #0056b3;
 }

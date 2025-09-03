@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "A React frontend for the myFlix movie API that allows users to view movies and manage their profiles.",
   "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "eject": "react-scripts eject",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Marco esu",
   "license": "ISC",
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.15.4"
