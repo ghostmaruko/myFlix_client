@@ -1,61 +1,49 @@
 import PropTypes from "prop-types";
-import { MovieCard } from "./movie-card";
 
 export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
-  console.log(movie.title, movie.imageURL);
+  if (!movie) return null;
 
-  const similarMovies = movies.filter(
-    (m) => m.genre.name === movie.genre.name && m._id !== movie._id
-  );
+  const { title, description, genre, director, imageURL, year, actors } = movie;
 
   return (
     <div className="movie-view">
-      <img src={movie.imageURL} alt={movie.title} />
-
-      <h2>
-        {movie.title} ({movie.year})
-      </h2>
-      <p>
-        <strong>Description:</strong> {movie.description}
-      </p>
-      <p>
-        <strong>Genre:</strong> {movie.genre.name} – {movie.genre.description}
-      </p>
-      <p>
-        <strong>Director:</strong> {movie.director.name} – {movie.director.bio}
-      </p>
-      <p>
-        <strong>Actors:</strong> {movie.actors.join(", ")}
-      </p>
-      {movie.featured && (
+      
+      <div className="movie-poster">
+        <img
+          src={
+            imageURL.startsWith("http")
+              ? imageURL
+              : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${imageURL}`
+          }
+          alt={title}
+        />
+      </div>
+      <div className="movie-details">
+        <h2>{title}</h2>
+        <p>{description}</p>
         <p>
-          <strong>🌟 Featured Movie!</strong>
+          <strong>Genre:</strong> {genre.name} - {genre.description}
         </p>
-      )}
+        <p>
+          <strong>Director:</strong> {director.name} - {director.bio}
+        </p>
+        <p>
+          <strong>Year:</strong> {year}
+        </p>
+        <p>
+          <strong>Actors:</strong> {actors.join(", ")}
+        </p>
+      </div>
       <button onClick={onBackClick}>Back</button>
-
-      {similarMovies.length > 0 && (
-        <>
-          <hr />
-          <h3>Similar Movies:</h3>
-          <div className="similar-movies">
-            {similarMovies.map((m) => (
-              <MovieCard key={m._id} movie={m} onMovieClick={onMovieClick} />
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 };
 
-// PropTypes
 MovieView.propTypes = {
   movie: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    imageURL: PropTypes.string,
+    description: PropTypes.string.isRequired,
     genre: PropTypes.shape({
       name: PropTypes.string,
       description: PropTypes.string,
@@ -64,19 +52,11 @@ MovieView.propTypes = {
       name: PropTypes.string,
       bio: PropTypes.string,
     }),
-    actors: PropTypes.arrayOf(PropTypes.string),
+    imageURL: PropTypes.string,
     year: PropTypes.number,
-    featured: PropTypes.bool,
+    actors: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
-        name: PropTypes.string,
-      }),
-    })
-  ).isRequired,
+  movies: PropTypes.array.isRequired,
   onBackClick: PropTypes.func.isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };

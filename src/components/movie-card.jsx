@@ -1,45 +1,35 @@
+import React from "react";
 import PropTypes from "prop-types";
 
 export const MovieCard = ({ movie, onMovieClick }) => {
+  // URL completo per l'immagine
+  const imageUrl = movie.imageURL
+    ? `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}`
+    : null;
+
   return (
     <div className="movie-card" onClick={() => onMovieClick(movie)}>
-      {/* Immagine del film */}
-      <img src={movie.imageURL} alt={movie.title} />
-
-      {/* Titolo overlay */}
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={movie.title}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/img/fallback.png"; // immagine di fallback locale
+          }}
+        />
+      ) : (
+        <div className="image-fallback">Image not available</div>
+      )}
       <h3>{movie.title}</h3>
     </div>
   );
 };
 
-// PropTypes
-/* MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    imageURL: PropTypes.string,
-    genre: PropTypes.shape({
-      name: PropTypes.string,
-      description: PropTypes.string,
-    }),
-    director: PropTypes.shape({
-      name: PropTypes.string,
-      bio: PropTypes.string,
-    }),
-    actors: PropTypes.arrayOf(PropTypes.string),
-    year: PropTypes.number,
-    featured: PropTypes.bool,
-  }).isRequired,
-  onMovieClick: PropTypes.func.isRequired,
-};
- */
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
     imageURL: PropTypes.string,
-    // _id: PropTypes.string,  // <- rimuovi o rendi opzionale
   }).isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };
