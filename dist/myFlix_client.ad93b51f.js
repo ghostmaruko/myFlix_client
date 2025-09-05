@@ -24969,10 +24969,12 @@ var _loginView = require("./login-view");
 var _s = $RefreshSig$();
 const MainView = ()=>{
     _s();
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = JSON.parse(localStorage.getItem("token"));
+    const [user, setUser] = (0, _react.useState)(storedUser ? storedUser : null);
+    const [token, setToken] = (0, _react.useState)(storedToken ? storedToken : null);
     const [movies, setMovies] = (0, _react.useState)([]);
     const [selectedMovie, setSelectedMovie] = (0, _react.useState)(null);
-    const [user, setUser] = (0, _react.useState)(null);
-    const [token, setToken] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
         if (!token) return;
         fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/movies", {
@@ -24997,7 +24999,7 @@ const MainView = ()=>{
         onMovieClick: (movie)=>setSelectedMovie(movie)
     }, void 0, false, {
         fileName: "src/components/main-view.jsx",
-        lineNumber: 32,
+        lineNumber: 34,
         columnNumber: 7
     }, undefined);
     // setToken
@@ -25008,7 +25010,7 @@ const MainView = ()=>{
         }
     }, void 0, false, {
         fileName: "src/components/main-view.jsx",
-        lineNumber: 44,
+        lineNumber: 46,
         columnNumber: 7
     }, undefined);
     // Show a message if the movie list is empty
@@ -25016,7 +25018,7 @@ const MainView = ()=>{
         children: "The list is empty!"
     }, void 0, false, {
         fileName: "src/components/main-view.jsx",
-        lineNumber: 55,
+        lineNumber: 57,
         columnNumber: 12
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -25030,18 +25032,19 @@ const MainView = ()=>{
                 ]
             }, void 0, true, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 60,
+                lineNumber: 62,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                 onClick: ()=>{
                     setUser(null);
                     setToken(null); // reset del token
+                    localStorage.clear();
                 },
                 children: "Logout"
             }, void 0, false, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 61,
+                lineNumber: 63,
                 columnNumber: 7
             }, undefined),
             movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
@@ -25049,17 +25052,17 @@ const MainView = ()=>{
                     onMovieClick: (movie)=>setSelectedMovie(movie)
                 }, movie._id, false, {
                     fileName: "src/components/main-view.jsx",
-                    lineNumber: 71,
+                    lineNumber: 74,
                     columnNumber: 9
                 }, undefined))
         ]
     }, void 0, true, {
         fileName: "src/components/main-view.jsx",
-        lineNumber: 59,
+        lineNumber: 61,
         columnNumber: 5
     }, undefined);
 };
-_s(MainView, "ld1mNqbzEgxPu9ZfASjBJ7ZrUMw=");
+_s(MainView, "9wJBvfUyU2IigbyWC+M5y3EH9h4=");
 _c = MainView;
 var _c;
 $RefreshReg$(_c, "MainView");
@@ -28421,8 +28424,13 @@ const LoginView = ({ onLoggedIn })=>{
             body: JSON.stringify(data)
         }).then((response)=>response.json()).then((data)=>{
             console.log("Login response:", data);
-            if (data.user && data.token) onLoggedIn(data.user, data.token);
-            else alert("Login failed");
+            // if (data.user && data.token) { //data.user and data.token mi arrivano dal be
+            if (data.user) {
+                // persisting a login session
+                localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("token", JSON.stringify(data.token));
+                onLoggedIn(data.user, data.token);
+            } else alert("Login failed");
         }).catch((e)=>{
             console.log("Login error:", e);
             alert("something went wrong");
@@ -28441,13 +28449,13 @@ const LoginView = ({ onLoggedIn })=>{
                         required: true
                     }, void 0, false, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 37,
+                        lineNumber: 41,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/login-view.jsx",
-                lineNumber: 35,
+                lineNumber: 39,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -28460,13 +28468,13 @@ const LoginView = ({ onLoggedIn })=>{
                         required: true
                     }, void 0, false, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 46,
+                        lineNumber: 50,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/login-view.jsx",
-                lineNumber: 44,
+                lineNumber: 48,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -28475,18 +28483,18 @@ const LoginView = ({ onLoggedIn })=>{
                     children: "Login"
                 }, void 0, false, {
                     fileName: "src/components/login-view.jsx",
-                    lineNumber: 54,
+                    lineNumber: 58,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/login-view.jsx",
-                lineNumber: 53,
+                lineNumber: 57,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/login-view.jsx",
-        lineNumber: 34,
+        lineNumber: 38,
         columnNumber: 5
     }, undefined);
 };

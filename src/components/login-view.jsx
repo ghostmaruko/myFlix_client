@@ -18,7 +18,11 @@ export const LoginView = ({ onLoggedIn }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Login response:", data);
-        if (data.user && data.token) { //data.user and data.token mi arrivano dal be
+        // if (data.user && data.token) { //data.user and data.token mi arrivano dal be
+        if (data.user) {
+          // persisting a login session
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("token", JSON.stringify(data.token));
           onLoggedIn(data.user, data.token);
         } else {
           alert("Login failed");
