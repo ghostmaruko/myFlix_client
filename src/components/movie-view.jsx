@@ -35,13 +35,13 @@ export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
       </div>
       <button onClick={onBackClick}>Back</button>
       <div>
-        <button
+    {/*     <button
           onClick={() => {
             setUser(null);
           }}
         >
           Logout
-        </button>
+        </button> */}
       </div>
     </div>
   );

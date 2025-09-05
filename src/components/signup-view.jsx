@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const SignupView = ({ onSignedUp }) => {
+export const SignupView = ({ onBackToLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -9,7 +9,6 @@ export const SignupView = ({ onSignedUp }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Corpo della richiesta corretto: oggetto JSON
     const data = { username, password, email, birthday };
 
     fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/users", {
@@ -22,16 +21,9 @@ export const SignupView = ({ onSignedUp }) => {
       .then((response) => {
         if (response.ok) {
           alert("Signup successful! You can now log in.");
-          if (onSignedUp) onSignedUp(); // opzionale: callback per notificare MainView
-          // oppure resettare i campi del form
-          setUsername("");
-          setPassword("");
-          setEmail("");
-          setBirthday("");
+          if (onBackToLogin) onBackToLogin(); // torna al login
         } else {
-          response.json().then((err) => {
-            alert("Signup failed: " + (err.message || response.statusText));
-          });
+          alert("Signup failed!");
         }
       })
       .catch((error) => {
@@ -84,6 +76,16 @@ export const SignupView = ({ onSignedUp }) => {
       </label>
 
       <button type="submit">Submit</button>
+
+      {onBackToLogin && (
+        <button
+          type="button"
+          onClick={onBackToLogin}
+          style={{ marginLeft: "10px" }}
+        >
+          Indietro
+        </button>
+      )}
     </form>
   );
 };
