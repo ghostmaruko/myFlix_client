@@ -22,7 +22,8 @@ export const LoginView = ({ onLoggedIn }) => {
         if (data.user) {
           // persisting a login session
           localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("token", JSON.stringify(data.token));
+          //localStorage.setItem("token", JSON.stringify(data.token));
+          localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
         } else {
           alert("Login failed");

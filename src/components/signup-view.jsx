@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const SignupView = () => {
+export const SignupView = ({ onSignedUp }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -9,27 +9,35 @@ export const SignupView = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const data = {
-      username: username,
-      password: password,
-      email: email,
-      birthday: birthday,
-    };
+    // Corpo della richiesta corretto: oggetto JSON
+    const data = { username, password, email, birthday };
 
-    fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/login", {
+    fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/users", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => {
-      if (response.ok) {
-        alert("Signup successful");
-        window.location.reload();
-      } else {
-        alert("Signup failed");
-      }
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Signup successful! You can now log in.");
+          if (onSignedUp) onSignedUp(); // opzionale: callback per notificare MainView
+          // oppure resettare i campi del form
+          setUsername("");
+          setPassword("");
+          setEmail("");
+          setBirthday("");
+        } else {
+          response.json().then((err) => {
+            alert("Signup failed: " + (err.message || response.statusText));
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Signup error:", error);
+        alert("Signup failed: network error");
+      });
   };
 
   return (
