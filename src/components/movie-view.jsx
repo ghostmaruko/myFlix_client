@@ -7,7 +7,6 @@ export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
 
   return (
     <div className="movie-view">
-      
       <div className="movie-poster">
         <img
           src={
@@ -35,6 +34,15 @@ export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
         </p>
       </div>
       <button onClick={onBackClick}>Back</button>
+      <div>
+        <button
+          onClick={() => {
+            setUser(null);
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };
