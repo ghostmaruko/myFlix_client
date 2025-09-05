@@ -55,15 +55,17 @@ export const MainView = () => {
                 setToken(token);
               }}
             />
-            <p>
+            <p className="form-footer">
               Non hai un account?{" "}
-              <button onClick={() => setView("signup")}>Registrati qui</button>
+              <button type="button" onClick={() => setView("signup")}>
+                Registrati qui
+              </button>
             </p>
           </>
         ) : (
           <>
             <SignupView onBackToLogin={() => setView("login")} />
-            <p>
+            <p className="form-footer">
               Hai già un account?{" "}
               <button onClick={() => setView("login")}>Torna al login</button>
             </p>

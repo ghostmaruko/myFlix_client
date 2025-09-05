@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
@@ -7,7 +7,6 @@ export const LoginView = ({ onLoggedIn }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Handle login logic here
     const data = { username, password };
 
     fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/login", {
@@ -17,12 +16,8 @@ export const LoginView = ({ onLoggedIn }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Login response:", data);
-        // if (data.user && data.token) { //data.user and data.token mi arrivano dal be
         if (data.user) {
-          // persisting a login session
           localStorage.setItem("user", JSON.stringify(data.user));
-          //localStorage.setItem("token", JSON.stringify(data.token));
           localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
         } else {
@@ -30,13 +25,15 @@ export const LoginView = ({ onLoggedIn }) => {
         }
       })
       .catch((e) => {
-        console.log("Login error:", e);
-        alert("something went wrong");
+        console.error("Login error:", e);
+        alert("Something went wrong");
       });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="pixel-form" onSubmit={handleSubmit}>
+      <h2>Login</h2>
+
       <label>
         Username:
         <input
@@ -46,6 +43,7 @@ export const LoginView = ({ onLoggedIn }) => {
           required
         />
       </label>
+
       <label>
         Password:
         <input
@@ -55,9 +53,8 @@ export const LoginView = ({ onLoggedIn }) => {
           required
         />
       </label>
-      <label>
-        <button type="submit">Login</button>
-      </label>
+
+      <button type="submit">Login</button>
     </form>
   );
 };

@@ -21,7 +21,7 @@ export const SignupView = ({ onBackToLogin }) => {
       .then((response) => {
         if (response.ok) {
           alert("Signup successful! You can now log in.");
-          if (onBackToLogin) onBackToLogin(); // torna al login
+          if (onBackToLogin) onBackToLogin();
         } else {
           alert("Signup failed!");
         }
@@ -33,7 +33,9 @@ export const SignupView = ({ onBackToLogin }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="pixel-form" onSubmit={handleSubmit}>
+      <h2>Sign Up</h2>
+
       <label>
         Username:
         <input
@@ -78,11 +80,7 @@ export const SignupView = ({ onBackToLogin }) => {
       <button type="submit">Submit</button>
 
       {onBackToLogin && (
-        <button
-          type="button"
-          onClick={onBackToLogin}
-          style={{ marginLeft: "10px" }}
-        >
+        <button type="button" className="back-btn" onClick={onBackToLogin}>
           Indietro
         </button>
       )}
