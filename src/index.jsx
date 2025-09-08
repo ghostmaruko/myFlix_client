@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 // entry point to the application
 import { createRoot } from "react-dom/client";
 
@@ -6,6 +7,8 @@ import "./index.scss";
 
 // import main view component
 import { MainView } from "./components/main-view";
+
+
 
 // main component
 const App = () => {
