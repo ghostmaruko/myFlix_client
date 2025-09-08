@@ -6,8 +6,7 @@ import { LoginView } from "./login-view";
 import { SignupView } from "./signup-view";
 import { ProfileView } from "./profile-view";
 import { NavigationBar } from "./navigation-bar";
-import { Container } from "react-bootstrap";
-
+import { Container, Row, Col } from "react-bootstrap";
 
 export const MainView = () => {
   const storedUser = (() => {
@@ -22,6 +21,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
+  const [showSignup, setShowSignup] = useState(false); // per switch login/signup
 
   useEffect(() => {
     if (!token) return;
@@ -57,16 +57,16 @@ export const MainView = () => {
             element={
               !user ? (
                 <Navigate to="/login" />
+              ) : movies.length === 0 ? (
+                <div className="text-center">The list is empty!</div>
               ) : (
-                <div className="movies-grid">
-                  {movies.length === 0 ? (
-                    <div>The list is empty!</div>
-                  ) : (
-                    movies.map((movie) => (
-                      <MovieCard key={movie._id} movie={movie} />
-                    ))
-                  )}
-                </div>
+                <Row className="g-4">
+                  {movies.map((movie) => (
+                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                      <MovieCard movie={movie} />
+                    </Col>
+                  ))}
+                </Row>
               )
             }
           />
@@ -76,24 +76,19 @@ export const MainView = () => {
             element={
               user ? (
                 <Navigate to="/" />
+              ) : showSignup ? (
+                <SignupView
+                  onSignedUp={() => setShowSignup(false)}
+                  onSwitchToLogin={() => setShowSignup(false)}
+                />
               ) : (
                 <LoginView
                   onLoggedIn={(user, token) => {
                     setUser(user);
                     setToken(token);
                   }}
+                  onSwitchToSignup={() => setShowSignup(true)}
                 />
-              )
-            }
-          />
-
-          <Route
-            path="/signup"
-            element={
-              user ? (
-                <Navigate to="/" />
-              ) : (
-                <SignupView onSignedUp={() => setUser(null)} />
               )
             }
           />
@@ -105,6 +100,7 @@ export const MainView = () => {
             }
           />
 
+          {/* ProfileView ancora commentato */}
           {/* <Route
             path="/profile"
             element={

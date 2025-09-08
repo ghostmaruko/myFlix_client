@@ -12,7 +12,7 @@ export const NavigationBar = ({ user, onLogout }) => {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav className="ms-auto align-items-center">
             {user ? (
               <>
                 <Nav.Link as={Link} to="/">
@@ -21,13 +21,15 @@ export const NavigationBar = ({ user, onLogout }) => {
                 <Nav.Link as={Link} to="/profile">
                   Profile
                 </Nav.Link>
-                <Button
-                  variant="outline-light"
-                  className="ms-2"
-                  onClick={onLogout}
-                >
-                  Logout
-                </Button>
+                <Nav.Item>
+                  <Button
+                    variant="outline-light"
+                    className="ms-2"
+                    onClick={onLogout}
+                  >
+                    Logout
+                  </Button>
+                </Nav.Item>
               </>
             ) : (
               <>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { Container, Form, Button, Alert, Spinner, Card } from "react-bootstrap";
 
 export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
   const [username, setUsername] = useState("");
@@ -15,107 +15,118 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
     setError("");
     setIsLoading(true);
 
-    const data = { username, password, email, birthday };
-
     fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ username, password, email, birthday }),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        return res.json();
       })
       .then((data) => {
         setIsLoading(false);
-        if (data.username) {
-          onSignedUp(data);
-        } else {
-          setError("Signup failed. Check your details.");
-          setPassword("");
-          setShake(true);
-          setTimeout(() => setShake(false), 500);
-        }
+        onSignedUp();
+        onSwitchToLogin();
       })
       .catch((e) => {
         console.error("Signup error:", e);
-        setIsLoading(false);
-        setError("Something went wrong. Try again later.");
+        setError("Something went wrong. Check your data or try again later.");
         setShake(true);
         setTimeout(() => setShake(false), 500);
-        setPassword("");
       });
   };
 
   return (
-    <Container style={{ maxWidth: "400px", marginTop: "50px" }} className={shake ? "shake" : ""}>
-      <h2 className="mb-4">Registrati</h2>
-      <Form onSubmit={handleSubmit}>
-        {error && <Alert variant="danger">{error}</Alert>}
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "80vh" }}
+    >
+      <Card
+        className={`p-4 shadow ${shake ? "shake" : ""}`}
+        style={{ width: "100%", maxWidth: "400px" }}
+      >
+        <Card.Body>
+          <h2 className="mb-4 text-center">Sign Up</h2>
+          {error && <Alert variant="danger">{error}</Alert>}
 
-        <Form.Group className="mb-3" controlId="signupUsername">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            placeholder="Enter Username"
-          />
-        </Form.Group>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="signupUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-        <Form.Group className="mb-3" controlId="signupPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Enter Password"
-          />
-        </Form.Group>
+            <Form.Group className="mb-3" controlId="signupPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-        <Form.Group className="mb-3" controlId="signupEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="Enter Email"
-          />
-        </Form.Group>
+            <Form.Group className="mb-3" controlId="signupEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-        <Form.Group className="mb-3" controlId="signupBirthday">
-          <Form.Label>Birthday</Form.Label>
-          <Form.Control
-            type="date"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-            required
-          />
-        </Form.Group>
+            <Form.Group className="mb-3" controlId="signupBirthday">
+              <Form.Label>Birthday</Form.Label>
+              <Form.Control
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+              />
+            </Form.Group>
 
-        <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />{" "}
-              Signing up...
-            </>
-          ) : (
-            "Sign Up"
-          )}
-        </Button>
-      </Form>
+            <Button
+              variant="success"
+              type="submit"
+              className="w-100 mb-3"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />{" "}
+                  Signing up...
+                </>
+              ) : (
+                "Sign Up"
+              )}
+            </Button>
+          </Form>
 
-      <div className="text-center">
-        <small>
-          Hai già un account?{" "}
-          <Button variant="link" onClick={onSwitchToLogin} style={{ padding: 0 }}>
-            Login qui
-          </Button>
-        </small>
-      </div>
+          <div className="text-center">
+            <small>
+              Hai già un account?{" "}
+              <Button
+                variant="link"
+                onClick={onSwitchToLogin}
+                style={{ padding: 0 }}
+              >
+                Accedi
+              </Button>
+            </small>
+          </div>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };
