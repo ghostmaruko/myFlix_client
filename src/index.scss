@@ -126,3 +126,31 @@
 .movie-view button:hover {
   background-color: #0056b3;
 }
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* default 5 colonne */
+  gap: 20px;
+  padding: 20px;
+}
+
+/* tablet: 3 colonne */
+@media (max-width: 992px) {
+  .movies-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* mobile: 2 colonne */
+@media (max-width: 576px) {
+  .movies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* piccoli schermi stretti: 1 colonna */
+@media (max-width: 400px) {
+  .movies-grid {
+    grid-template-columns: 1fr;
+  }
+}

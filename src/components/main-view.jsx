@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { MovieCard } from "./movie-card";
 import { MovieView } from "./movie-view";
 import { LoginView } from "./login-view";
 import { SignupView } from "./signup-view";
-import Button from "react-bootstrap/Button";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+
 
 export const MainView = () => {
   const storedUser = (() => {
@@ -15,8 +16,8 @@ export const MainView = () => {
   })();
   const storedToken = localStorage.getItem("token");
 
-  const [user, setUser] = useState(storedUser);
-  const [token, setToken] = useState(storedToken);
+  const [user, setUser] = useState(storedUser || null);
+  const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showLogin, setShowLogin] = useState(true);
@@ -27,7 +28,7 @@ export const MainView = () => {
     fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/movies", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
         const moviesWithId = data.map((movie, index) => ({
           ...movie,
@@ -35,19 +36,14 @@ export const MainView = () => {
         }));
         setMovies(moviesWithId);
       })
-      .catch((error) => console.error("Fetch error:", error));
+      .catch((err) => console.error("Fetch error:", err));
   }, [token]);
 
-  if (selectedMovie) {
-    return (
-      <MovieView
-        movie={selectedMovie}
-        movies={movies}
-        onBackClick={() => setSelectedMovie(null)}
-        onMovieClick={(movie) => setSelectedMovie(movie)}
-      />
-    );
-  }
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+  };
 
   if (!user) {
     return showLogin ? (
@@ -55,47 +51,72 @@ export const MainView = () => {
         onLoggedIn={(user, token) => {
           setUser(user);
           setToken(token);
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", token);
         }}
         onSwitchToSignup={() => setShowLogin(false)}
       />
     ) : (
       <SignupView
-        onSignedUp={(user) => {
-          // Dopo la registrazione, mostra login
-          setShowLogin(true);
-        }}
+        onSignedUp={(user) => setUser(user)}
         onSwitchToLogin={() => setShowLogin(true)}
       />
     );
   }
 
-  if (movies.length === 0) {
-    return <div>The list is empty!</div>;
+  if (selectedMovie) {
+    return (
+      <>
+        <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
+          <Container>
+            <Navbar.Brand>Welcome, {user.username}</Navbar.Brand>
+            <Nav className="ms-auto">
+              <Button variant="outline-light" className="me-2">
+                Film preferiti
+              </Button>
+              <Button variant="outline-light" onClick={handleLogout}>
+                Logout
+              </Button>
+            </Nav>
+          </Container>
+        </Navbar>
+        <MovieView
+          movie={selectedMovie}
+          movies={movies}
+          onBackClick={() => setSelectedMovie(null)}
+          onMovieClick={(movie) => setSelectedMovie(movie)}
+        />
+      </>
+    );
   }
 
   return (
-    <div className="main-view">
-      <p>Welcome, {user.username}!</p>
-      <Button
-        variant="primary"
-        onClick={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-      >
-        Logout
-      </Button>
+    <>
+      <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
+        <Container>
+          <Navbar.Brand>Welcome, {user.username}</Navbar.Brand>
+          <Nav className="ms-auto">
+            <Button variant="outline-light" className="me-2">
+              Film preferiti
+            </Button>
+            <Button variant="outline-light" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Nav>
+        </Container>
+      </Navbar>
 
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie._id}
-          movie={movie}
-          onMovieClick={(movie) => setSelectedMovie(movie)}
-        />
-      ))}
-    </div>
+      <div className="movies-grid">
+        {movies.length === 0 ? (
+          <div>The list is empty!</div>
+        ) : (
+          movies.map((movie) => (
+            <MovieCard
+              key={movie._id}
+              movie={movie}
+              onMovieClick={(movie) => setSelectedMovie(movie)}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 };
