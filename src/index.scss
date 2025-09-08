@@ -1,3 +1,28 @@
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-10px);
+  }
+  80% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
 .main-view {
   display: grid;
   background-color: #c9c9c9;
@@ -45,7 +70,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   font-size: 1rem;
   text-align: center;

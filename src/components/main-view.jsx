@@ -15,10 +15,11 @@ export const MainView = () => {
   })();
   const storedToken = localStorage.getItem("token");
 
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [user, setUser] = useState(storedUser);
+  const [token, setToken] = useState(storedToken);
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -49,16 +50,24 @@ export const MainView = () => {
   }
 
   if (!user) {
-    return (
-      <>
-        <LoginView
-          onLoggedIn={(user, token) => {
-            setUser(user);
-            setToken(token);
-          }}
-        />
-        or <SignupView />
-      </>
+    return showLogin ? (
+      <LoginView
+        onLoggedIn={(user, token) => {
+          setUser(user);
+          setToken(token);
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", token);
+        }}
+        onSwitchToSignup={() => setShowLogin(false)}
+      />
+    ) : (
+      <SignupView
+        onSignedUp={(user) => {
+          // Dopo la registrazione, mostra login
+          setShowLogin(true);
+        }}
+        onSwitchToLogin={() => setShowLogin(true)}
+      />
     );
   }
 
@@ -70,7 +79,7 @@ export const MainView = () => {
     <div className="main-view">
       <p>Welcome, {user.username}!</p>
       <Button
-        varian="primary"
+        variant="primary"
         onClick={() => {
           setUser(null);
           setToken(null);

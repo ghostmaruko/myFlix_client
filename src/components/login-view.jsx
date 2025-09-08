@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Spinner } from "react-bootstrap";
+import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 
-export const LoginView = ({ onLoggedIn, onSwitchToSignUp }) => {
+export const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // stato per il loading
+  const [isLoading, setIsLoading] = useState(false);
+  const [shake, setShake] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setError(""); //reset error
-    setIsLoading(true); //attiva spinner
+    setError("");
+    setIsLoading(true);
 
     const data = { username, password };
 
@@ -19,26 +20,38 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignUp }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+        return response.json();
+      })
       .then((data) => {
-        setIsLoading(false); //disattiva spinner
+        setIsLoading(false);
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
         } else {
-          setError("Login failed. Please check your username and password");
+          setError("Login failed. Check your username and password.");
+          setPassword("");
+          setShake(true);
+          setTimeout(() => setShake(false), 500);
         }
       })
       .catch((e) => {
         console.error("Login error:", e);
         setIsLoading(false);
-        setError("Something went wrong. Please try again later");
+        setError("Something went wrong. Try again later.");
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+        setPassword("");
       });
   };
 
   return (
-    <Container style={{ maxWidth: "400px", marginTop: "50px" }}>
+    <Container
+      style={{ maxWidth: "400px", marginTop: "50px" }}
+      className={shake ? "shake" : ""}
+    >
       <h2 className="mb-4">Login</h2>
       <Form onSubmit={handleSubmit}>
         {error && <Alert variant="danger">{error}</Alert>}
@@ -51,7 +64,7 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignUp }) => {
             onChange={(e) => setUsername(e.target.value)}
             required
             placeholder="Enter Username"
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="loginPassword">
@@ -62,14 +75,14 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignUp }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="Enter Password"
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Button
           variant="primary"
           type="submit"
-          className="w-100"
-          disabled={"isLoading"}
+          className="w-100 mb-3"
+          disabled={isLoading}
         >
           {isLoading ? (
             <>
@@ -93,10 +106,10 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignUp }) => {
           Non hai un account?{" "}
           <Button
             variant="link"
-            onClick={onSwitchToSignUp}
+            onClick={onSwitchToSignup}
             style={{ padding: 0 }}
           >
-            Clicca qui per registrati
+            Clicca qui per registrarti
           </Button>
         </small>
       </div>
