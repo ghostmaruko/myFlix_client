@@ -1,7 +1,13 @@
+import React from "react";
 import PropTypes from "prop-types";
+import { useParams, Link } from "react-router-dom";
 
-export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
-  if (!movie) return null;
+export const MovieView = ({ movies }) => {
+  const { movieId } = useParams();
+
+  const movie = movies.find((m) => m._id === movieId);
+
+  if (!movie) return <div>Movie not found</div>;
 
   const { title, description, genre, director, imageURL, year, actors } = movie;
 
@@ -17,6 +23,7 @@ export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
           alt={title}
         />
       </div>
+
       <div className="movie-details">
         <h2>{title}</h2>
         <p>{description}</p>
@@ -33,38 +40,33 @@ export const MovieView = ({ movie, movies, onBackClick, onMovieClick }) => {
           <strong>Actors:</strong> {actors.join(", ")}
         </p>
       </div>
-      <button onClick={onBackClick}>Back</button>
-      <div>
-        <button
-          onClick={() => {
-            setUser(null);
-          }}
-        >
-          Logout
-        </button>
+
+      <div className="mt-3">
+        <Link to="/">
+          <button>Back to Movies</button>
+        </Link>
       </div>
     </div>
   );
 };
 
 MovieView.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    genre: PropTypes.shape({
-      name: PropTypes.string,
-      description: PropTypes.string,
-    }),
-    director: PropTypes.shape({
-      name: PropTypes.string,
-      bio: PropTypes.string,
-    }),
-    imageURL: PropTypes.string,
-    year: PropTypes.number,
-    actors: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
-  movies: PropTypes.array.isRequired,
-  onBackClick: PropTypes.func.isRequired,
-  onMovieClick: PropTypes.func.isRequired,
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      genre: PropTypes.shape({
+        name: PropTypes.string,
+        description: PropTypes.string,
+      }),
+      director: PropTypes.shape({
+        name: PropTypes.string,
+        bio: PropTypes.string,
+      }),
+      imageURL: PropTypes.string,
+      year: PropTypes.number,
+      actors: PropTypes.arrayOf(PropTypes.string),
+    })
+  ).isRequired,
 };

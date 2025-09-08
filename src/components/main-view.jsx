@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { MovieCard } from "./movie-card";
 import { MovieView } from "./movie-view";
 import { LoginView } from "./login-view";
 import { SignupView } from "./signup-view";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { ProfileView } from "./profile-view";
+import { NavigationBar } from "./navigation-bar";
+import { Container } from "react-bootstrap";
 
 
 export const MainView = () => {
@@ -19,8 +22,6 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -45,78 +46,77 @@ export const MainView = () => {
     localStorage.clear();
   };
 
-  if (!user) {
-    return showLogin ? (
-      <LoginView
-        onLoggedIn={(user, token) => {
-          setUser(user);
-          setToken(token);
-        }}
-        onSwitchToSignup={() => setShowLogin(false)}
-      />
-    ) : (
-      <SignupView
-        onSignedUp={(user) => setUser(user)}
-        onSwitchToLogin={() => setShowLogin(true)}
-      />
-    );
-  }
-
-  if (selectedMovie) {
-    return (
-      <>
-        <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
-          <Container>
-            <Navbar.Brand>Welcome, {user.username}</Navbar.Brand>
-            <Nav className="ms-auto">
-              <Button variant="outline-light" className="me-2">
-                Film preferiti
-              </Button>
-              <Button variant="outline-light" onClick={handleLogout}>
-                Logout
-              </Button>
-            </Nav>
-          </Container>
-        </Navbar>
-        <MovieView
-          movie={selectedMovie}
-          movies={movies}
-          onBackClick={() => setSelectedMovie(null)}
-          onMovieClick={(movie) => setSelectedMovie(movie)}
-        />
-      </>
-    );
-  }
-
   return (
     <>
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
-        <Container>
-          <Navbar.Brand>Welcome, {user.username}</Navbar.Brand>
-          <Nav className="ms-auto">
-            <Button variant="outline-light" className="me-2">
-              Film preferiti
-            </Button>
-            <Button variant="outline-light" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Nav>
-        </Container>
-      </Navbar>
+      <NavigationBar user={user} onLogout={handleLogout} />
 
-      <div className="movies-grid">
-        {movies.length === 0 ? (
-          <div>The list is empty!</div>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie._id}
-              movie={movie}
-              onMovieClick={(movie) => setSelectedMovie(movie)}
-            />
-          ))
-        )}
-      </div>
+      <Container className="mt-4">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              !user ? (
+                <Navigate to="/login" />
+              ) : (
+                <div className="movies-grid">
+                  {movies.length === 0 ? (
+                    <div>The list is empty!</div>
+                  ) : (
+                    movies.map((movie) => (
+                      <MovieCard key={movie._id} movie={movie} />
+                    ))
+                  )}
+                </div>
+              )
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              user ? (
+                <Navigate to="/" />
+              ) : (
+                <LoginView
+                  onLoggedIn={(user, token) => {
+                    setUser(user);
+                    setToken(token);
+                  }}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/signup"
+            element={
+              user ? (
+                <Navigate to="/" />
+              ) : (
+                <SignupView onSignedUp={() => setUser(null)} />
+              )
+            }
+          />
+
+          <Route
+            path="/movies/:movieId"
+            element={
+              !user ? <Navigate to="/login" /> : <MovieView movies={movies} />
+            }
+          />
+
+          {/* <Route
+            path="/profile"
+            element={
+              !user ? (
+                <Navigate to="/login" />
+              ) : (
+                <ProfileView user={user} token={token} movies={movies} />
+              )
+            }
+          /> */}
+        </Routes>
+      </Container>
     </>
   );
 };
