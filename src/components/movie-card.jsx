@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 
 export const MovieCard = ({ movie, user, token, setUser }) => {
-  const imageUrl = movie.imageURL
-    ? `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}`
-    : null;
-
+  const imageUrl = movie.imageURL || "/img/fallback.png";
   const isFavorite = user?.FavoriteMovies?.includes(movie._id);
 
   const toggleFavorite = () => {
@@ -38,27 +35,10 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
     <Card className="h-100 movie-card">
       <Link
         to={`/movies/${movie._id}`}
-        state={{ movie }} // <-- passiamo l'intero oggetto movie al MovieView
+        state={{ movie }}
         className="text-decoration-none"
       >
-        {imageUrl ? (
-          <Card.Img
-            variant="top"
-            src={imageUrl}
-            alt={movie.title}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/img/fallback.png";
-            }}
-          />
-        ) : (
-          <div
-            className="d-flex align-items-center justify-content-center bg-secondary text-white"
-            style={{ height: "200px" }}
-          >
-            Image not available
-          </div>
-        )}
+        <Card.Img variant="top" src={imageUrl} alt={movie.title} />
       </Link>
 
       <Card.Body className="d-flex flex-column justify-content-between">

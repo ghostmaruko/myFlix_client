@@ -9,17 +9,11 @@ import { NavigationBar } from "./navigation-bar";
 import { Container, Row, Col } from "react-bootstrap";
 
 export const MainView = () => {
-  const storedUser = (() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
-  })();
-  const storedToken = localStorage.getItem("token");
+  const storedUser = JSON.parse(localStorage.getItem("user")) || null;
+  const storedToken = localStorage.getItem("token") || null;
 
-  const [user, setUser] = useState(storedUser || null);
-  const [token, setToken] = useState(storedToken || null);
+  const [user, setUser] = useState(storedUser);
+  const [token, setToken] = useState(storedToken);
   const [movies, setMovies] = useState([]);
   const [showSignup, setShowSignup] = useState(false);
 
@@ -31,7 +25,7 @@ export const MainView = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // assegna un _id di fallback se manca
+        // fallback solo se _id davvero mancante
         const moviesWithId = data.map((movie, index) => ({
           ...movie,
           _id: movie._id || index.toString(),
@@ -62,18 +56,16 @@ export const MainView = () => {
                 <div className="text-center">The list is empty!</div>
               ) : (
                 <Row className="g-4">
-                  {movies
-                    .filter((m) => m._id) // assicurati che ogni movie abbia _id
-                    .map((movie) => (
-                      <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                        <MovieCard
-                          movie={movie}
-                          user={user}
-                          token={token}
-                          setUser={setUser}
-                        />
-                      </Col>
-                    ))}
+                  {movies.map((movie) => (
+                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                      <MovieCard
+                        movie={movie}
+                        user={user}
+                        token={token}
+                        setUser={setUser}
+                      />
+                    </Col>
+                  ))}
                 </Row>
               )
             }
