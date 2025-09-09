@@ -100,8 +100,7 @@ export const MainView = () => {
             }
           />
 
-          {/* ProfileView ancora commentato */}
-          {/* <Route
+          <Route
             path="/profile"
             element={
               !user ? (
@@ -110,7 +109,7 @@ export const MainView = () => {
                 <ProfileView user={user} token={token} movies={movies} />
               )
             }
-          /> */}
+          />
         </Routes>
       </Container>
     </>
