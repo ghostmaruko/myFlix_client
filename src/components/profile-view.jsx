@@ -11,8 +11,9 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const favoriteMovies = movies.filter((m) =>
-    user.FavoriteMovies?.includes(m._id)
+    user.favoriteMovies?.includes(m._id)
   );
+  
 
   const handleUpdate = (e) => {
     e.preventDefault();

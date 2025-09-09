@@ -4,10 +4,17 @@ import { Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 
 export const MovieCard = ({ movie, user, token, setUser }) => {
-  const imageUrl = movie.imageURL || "/img/fallback.png";
+  const imageUrl = movie.imageURL
+    ? movie.imageURL.startsWith("http")
+      ? movie.imageURL
+      : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}`
+    : null;
+
   const isFavorite = user?.FavoriteMovies?.includes(movie._id);
 
   const toggleFavorite = () => {
+    if (!user || !token) return;
+
     const method = isFavorite ? "DELETE" : "POST";
 
     fetch(
@@ -27,6 +34,7 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
       .then((updatedUser) => {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
+        console.log("Updated favorites:", updatedUser.FavoriteMovies);
       })
       .catch((err) => console.error("Error updating favorites:", err));
   };
@@ -38,7 +46,24 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
         state={{ movie }}
         className="text-decoration-none"
       >
-        <Card.Img variant="top" src={imageUrl} alt={movie.title} />
+        {imageUrl ? (
+          <Card.Img
+            variant="top"
+            src={imageUrl}
+            alt={movie.title}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/img/fallback.png";
+            }}
+          />
+        ) : (
+          <div
+            className="d-flex align-items-center justify-content-center bg-secondary text-white"
+            style={{ height: "200px" }}
+          >
+            Image not available
+          </div>
+        )}
       </Link>
 
       <Card.Body className="d-flex flex-column justify-content-between">
