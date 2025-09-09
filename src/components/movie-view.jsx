@@ -1,13 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { useParams, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 
-export const MovieView = ({ movies }) => {
-  const { movieId } = useParams();
-  const movie = movies.find((m) => m._id === movieId);
+export const MovieView = () => {
+  const location = useLocation();
+  const movie = location.state?.movie;
 
-  if (!movie) return <div className="text-center mt-5">Movie not found</div>;
+  if (!movie) return <div className="text-center mt-5">Loading movie...</div>;
 
   const { title, description, genre, director, imageURL, year, actors } = movie;
 
@@ -58,25 +57,4 @@ export const MovieView = ({ movies }) => {
       </Row>
     </Container>
   );
-};
-
-MovieView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
-        name: PropTypes.string,
-        description: PropTypes.string,
-      }),
-      director: PropTypes.shape({
-        name: PropTypes.string,
-        bio: PropTypes.string,
-      }),
-      imageURL: PropTypes.string,
-      year: PropTypes.number,
-      actors: PropTypes.arrayOf(PropTypes.string),
-    })
-  ).isRequired,
 };

@@ -21,7 +21,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [showSignup, setShowSignup] = useState(false); // per switch login/signup
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -31,6 +31,7 @@ export const MainView = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        // assegna un _id di fallback se manca
         const moviesWithId = data.map((movie, index) => ({
           ...movie,
           _id: movie._id || index.toString(),
@@ -61,11 +62,18 @@ export const MainView = () => {
                 <div className="text-center">The list is empty!</div>
               ) : (
                 <Row className="g-4">
-                  {movies.map((movie) => (
-                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                      <MovieCard movie={movie} />
-                    </Col>
-                  ))}
+                  {movies
+                    .filter((m) => m._id) // assicurati che ogni movie abbia _id
+                    .map((movie) => (
+                      <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                        <MovieCard
+                          movie={movie}
+                          user={user}
+                          token={token}
+                          setUser={setUser}
+                        />
+                      </Col>
+                    ))}
                 </Row>
               )
             }
