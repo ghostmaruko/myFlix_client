@@ -8,14 +8,21 @@ import { ProfileView } from "./profile-view";
 import { NavigationBar } from "./navigation-bar";
 import { Container, Row, Col } from "react-bootstrap";
 
-export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user")) || null;
-  const storedToken = localStorage.getItem("token") || null;
 
-  const [user, setUser] = useState(storedUser);
-  const [token, setToken] = useState(storedToken);
+export const MainView = () => {
+  const storedUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  })();
+  const storedToken = localStorage.getItem("token");
+
+  const [user, setUser] = useState(storedUser || null);
+  const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [showSignup, setShowSignup] = useState(false);
+  const [showSignup, setShowSignup] = useState(false); // per switch login/signup
 
   useEffect(() => {
     if (!token) return;
@@ -25,7 +32,6 @@ export const MainView = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // fallback solo se _id davvero mancante
         const moviesWithId = data.map((movie, index) => ({
           ...movie,
           _id: movie._id || index.toString(),
@@ -59,6 +65,7 @@ export const MainView = () => {
                   {movies.map((movie) => (
                     <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
                       <MovieCard
+                        key={movie}
                         movie={movie}
                         user={user}
                         token={token}

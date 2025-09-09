@@ -1,22 +1,18 @@
-/* Animazione shake per login/signup */
+/* =========================
+   Animazione shake per login/signup
+========================= */
 @keyframes shake {
-  0% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  20% {
-    transform: translateX(-10px);
-  }
-  40% {
-    transform: translateX(10px);
-  }
+  20%,
   60% {
     transform: translateX(-10px);
   }
+  40%,
   80% {
     transform: translateX(10px);
-  }
-  100% {
-    transform: translateX(0);
   }
 }
 
@@ -24,30 +20,27 @@
   animation: shake 0.5s;
 }
 
-/* MovieCard */
+/* =========================
+   MovieCard - griglia copertine
+========================= */
 .movie-card {
-  position: relative;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  padding: 10px;
+  border: none;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  overflow: hidden;
+  overflow: hidden ;
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
 .movie-card img {
   width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  display: block;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
   transition: transform 0.3s;
 }
 
@@ -61,73 +54,74 @@
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.6);
-  color: white;
+  color: #fff;
   font-size: 1rem;
   text-align: center;
   padding: 5px;
   margin: 0;
   opacity: 0;
   transition: opacity 0.3s;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .movie-card:hover h3 {
   opacity: 1;
 }
 
-/* MovieView (dettaglio film) */
-.movie-view {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #cecece;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
+/* =========================
+   Movie Modal (dettaglio film)
+========================= */
+.modal-lg {
+  max-width: 750px; /* leggermente più piccolo */
 }
 
-.movie-view img {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  margin-bottom: 20px;
-  border-radius: 5px;
+.movie-modal-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
 }
 
-.movie-view h2 {
+.movie-modal-body img {
+  flex: 0 0 40%; /* leggermente più piccolo */
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.movie-modal-info {
+  flex: 1;
+}
+
+.movie-modal-info h3 {
+  margin-top: 0;
   margin-bottom: 15px;
 }
 
-.movie-view p {
+.movie-modal-info p {
   margin: 5px 0;
 }
 
-.movie-view button {
+.movie-modal-info button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
-  border: none;
   border-radius: 5px;
-  color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1rem;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-.movie-view button:hover {
-  background-color: #0056b3;
+.movie-modal-info button:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
 }
 
-.favorite-btn {
-  z-index: 10;
-  border: none;
-  font-size: 1.2rem;
-  padding: 0.3rem 0.6rem;
-}
-
-/* Movies grid - con Row e Col di Bootstrap */
+/* =========================
+   Movies grid - Row & Col Bootstrap
+========================= */
 .movies-grid {
-  padding: 20px;
+  padding: 20px 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -139,21 +133,22 @@
     gap: 16px;
   }
 }
-
 @media (max-width: 576px) {
   .movies-grid {
     gap: 12px;
   }
 }
 
-/* fallback immagini */
+/* =========================
+   Fallback immagini
+========================= */
 .image-fallback {
   width: 100%;
-  height: 200px;
+  height: 180px;
   background-color: #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #666;
-  border-radius: 5px;
+  border-radius: 8px;
 }

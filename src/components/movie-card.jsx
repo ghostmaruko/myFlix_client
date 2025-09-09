@@ -1,93 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { MovieModal } from "./movie-modal";
+
 
 export const MovieCard = ({ movie, user, token, setUser }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const imageUrl = movie.imageURL
     ? movie.imageURL.startsWith("http")
       ? movie.imageURL
       : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}`
     : null;
 
-  const isFavorite = user?.FavoriteMovies?.includes(movie._id);
-
-  const toggleFavorite = () => {
-    if (!user || !token) return;
-
-    const method = isFavorite ? "DELETE" : "POST";
-
-    fetch(
-      `https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}/movies/${movie._id}`,
-      {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to update favorites");
-        return res.json();
-      })
-      .then((updatedUser) => {
-        setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        console.log("Updated favorites:", updatedUser.FavoriteMovies);
-      })
-      .catch((err) => console.error("Error updating favorites:", err));
-  };
-
   return (
-    <Card className="h-100 movie-card">
-      <Link
-        to={`/movies/${movie._id}`}
-        state={{ movie }}
-        className="text-decoration-none"
-      >
+    <>
+      <Card className="movie-card" onClick={() => setShowModal(true)}>
         {imageUrl ? (
           <Card.Img
-            variant="top"
             src={imageUrl}
             alt={movie.title}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/img/fallback.png";
-            }}
+            className="movie-cover"
+            style={{ cursor: "pointer", borderRadius: "8px", objectFit: "cover", height: "300px" }}
           />
         ) : (
           <div
             className="d-flex align-items-center justify-content-center bg-secondary text-white"
-            style={{ height: "200px" }}
+            style={{ height: "300px", borderRadius: "8px" }}
           >
             Image not available
           </div>
         )}
-      </Link>
+      </Card>
 
-      <Card.Body className="d-flex flex-column justify-content-between">
-        <Card.Title className="text-center">{movie.title}</Card.Title>
-        {user && (
-          <Button
-            variant={isFavorite ? "danger" : "outline-primary"}
-            onClick={toggleFavorite}
-            className="mt-2"
-          >
-            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-          </Button>
-        )}
-      </Card.Body>
-    </Card>
+      {showModal && (
+        <MovieModal
+          movie={movie}
+          user={user}
+          token={token}
+          setUser={setUser}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 };
 
 MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    imageURL: PropTypes.string,
-  }).isRequired,
+  movie: PropTypes.object.isRequired,
   user: PropTypes.object,
   token: PropTypes.string,
   setUser: PropTypes.func,

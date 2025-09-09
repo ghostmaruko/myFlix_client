@@ -13298,4 +13298,144 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  20%, 60% {
+    transform: translateX(-10px);
+  }
+
+  40%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+.shake {
+  animation: .5s shake;
+}
+
+.movie-card {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: transform .3s, box-shadow .3s;
+  overflow: hidden;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px #00000040;
+}
+
+.movie-card img {
+  object-fit: cover;
+  border-radius: 8px;
+  width: 100%;
+  height: 150px;
+  transition: transform .3s;
+}
+
+.movie-card:hover img {
+  transform: scale(1.05);
+}
+
+.movie-card h3 {
+  color: #fff;
+  text-align: center;
+  opacity: 0;
+  background: #0009;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  margin: 0;
+  padding: 5px;
+  font-size: 1rem;
+  transition: opacity .3s;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.movie-card:hover h3 {
+  opacity: 1;
+}
+
+.modal-lg {
+  max-width: 750px;
+}
+
+.movie-modal-body {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+  display: flex;
+}
+
+.movie-modal-body img {
+  object-fit: cover;
+  border-radius: 8px;
+  flex: 0 0 40%;
+  max-width: 100%;
+}
+
+.movie-modal-info {
+  flex: 1;
+}
+
+.movie-modal-info h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.movie-modal-info p {
+  margin: 5px 0;
+}
+
+.movie-modal-info button {
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color .2s, transform .2s;
+}
+
+.movie-modal-info button:hover {
+  opacity: .9;
+  transform: scale(1.03);
+}
+
+.movies-grid {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px 0;
+  display: flex;
+}
+
+@media (width <= 992px) {
+  .movies-grid {
+    gap: 16px;
+  }
+}
+
+@media (width <= 576px) {
+  .movies-grid {
+    gap: 12px;
+  }
+}
+
+.image-fallback {
+  color: #666;
+  background-color: #ddd;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 180px;
+  display: flex;
+}
 /*# sourceMappingURL=myFlix_client.9f367d21.css.map */
