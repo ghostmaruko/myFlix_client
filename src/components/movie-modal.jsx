@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import { Modal, Button, Row, Col } from "react-bootstrap";
 
 export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
-  const isFavorite = user?.FavoriteMovies?.includes(movie._id);
+  const isfavorite = user?.FavoriteMovies?.includes(movie._id);
 
   const toggleFavorite = () => {
     if (!user || !token) return;
 
-    const method = isFavorite ? "DELETE" : "POST";
+    const method = isfavorite ? "DELETE" : "POST";
     fetch(
       `https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}/movies/${movie._id}`,
       {
@@ -48,8 +48,8 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
             <p>{movie.description}</p>
 
             {user && (
-              <Button variant={isFavorite ? "danger" : "primary"} onClick={toggleFavorite}>
-                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              <Button variant={isfavorite ? "danger" : "primary"} onClick={toggleFavorite}>
+                {isfavorite ? "Remove from Favorites" : "Add to Favorites"}
               </Button>
             )}
           </Col>
