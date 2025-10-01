@@ -24981,7 +24981,8 @@ const MainView = ()=>{
     const [user, setUser] = (0, _react.useState)(storedUser || null);
     const [token, setToken] = (0, _react.useState)(storedToken || null);
     const [movies, setMovies] = (0, _react.useState)([]);
-    const [showSignup, setShowSignup] = (0, _react.useState)(false); // per switch login/signup
+    const [showSignup, setShowSignup] = (0, _react.useState)(false);
+    const [searchTerm, setSearchTerm] = (0, _react.useState)("");
     (0, _react.useEffect)(()=>{
         if (!token) return;
         fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/movies", {
@@ -24989,6 +24990,7 @@ const MainView = ()=>{
                 Authorization: `Bearer ${token}`
             }
         }).then((res)=>res.json()).then((data)=>{
+            console.log("Fetched movies:", data); // Controlla i campi disponibili
             const moviesWithId = data.map((movie, index)=>({
                     ...movie,
                     _id: movie._id || index.toString()
@@ -25003,6 +25005,8 @@ const MainView = ()=>{
         setToken(null);
         localStorage.clear();
     };
+    // Lista filtrata: protegge contro campi mancanti
+    const filteredMovies = movies.filter((movie)=>(movie.Title || movie.title || "").toLowerCase().includes(searchTerm.toLowerCase()));
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _navigationBar.NavigationBar), {
@@ -25010,7 +25014,7 @@ const MainView = ()=>{
                 onLogout: handleLogout
             }, void 0, false, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 52,
+                lineNumber: 58,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Container), {
@@ -25023,45 +25027,72 @@ const MainView = ()=>{
                                 to: "/login"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 60,
+                                lineNumber: 66,
                                 columnNumber: 17
                             }, void 0) : movies.length === 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                                 className: "text-center",
                                 children: "The list is empty!"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 62,
+                                lineNumber: 68,
                                 columnNumber: 17
-                            }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
-                                className: "g-4",
-                                children: movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
-                                        xs: 12,
-                                        sm: 6,
-                                        md: 4,
-                                        lg: 3,
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
-                                            movie: movie,
-                                            user: user,
-                                            token: token,
-                                            setUser: setUser
-                                        }, movie, false, {
-                                            fileName: "src/components/main-view.jsx",
-                                            lineNumber: 67,
-                                            columnNumber: 23
-                                        }, void 0)
-                                    }, movie._id, false, {
+                            }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                        type: "text",
+                                        placeholder: "Search movies...",
+                                        value: searchTerm,
+                                        onChange: (e)=>setSearchTerm(e.target.value),
+                                        className: "form-control mb-3"
+                                    }, void 0, false, {
                                         fileName: "src/components/main-view.jsx",
-                                        lineNumber: 66,
+                                        lineNumber: 72,
+                                        columnNumber: 19
+                                    }, void 0),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
+                                        className: "g-4",
+                                        children: filteredMovies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
+                                                xs: 12,
+                                                sm: 6,
+                                                md: 4,
+                                                lg: 3,
+                                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
+                                                    movie: movie,
+                                                    user: user,
+                                                    token: token,
+                                                    setUser: setUser
+                                                }, movie._id, false, {
+                                                    fileName: "src/components/main-view.jsx",
+                                                    lineNumber: 83,
+                                                    columnNumber: 25
+                                                }, void 0)
+                                            }, movie._id, false, {
+                                                fileName: "src/components/main-view.jsx",
+                                                lineNumber: 82,
+                                                columnNumber: 23
+                                            }, void 0))
+                                    }, void 0, false, {
+                                        fileName: "src/components/main-view.jsx",
+                                        lineNumber: 80,
+                                        columnNumber: 19
+                                    }, void 0),
+                                    filteredMovies.length === 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "text-center mt-3",
+                                        children: [
+                                            'No movies found for "',
+                                            searchTerm,
+                                            '"'
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/main-view.jsx",
+                                        lineNumber: 95,
                                         columnNumber: 21
-                                    }, void 0))
-                            }, void 0, false, {
-                                fileName: "src/components/main-view.jsx",
-                                lineNumber: 64,
-                                columnNumber: 17
-                            }, void 0)
+                                    }, void 0)
+                                ]
+                            }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 56,
+                            lineNumber: 62,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25070,14 +25101,14 @@ const MainView = ()=>{
                                 to: "/"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 85,
+                                lineNumber: 108,
                                 columnNumber: 17
                             }, void 0) : showSignup ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _signupView.SignupView), {
                                 onSignedUp: ()=>setShowSignup(false),
                                 onSwitchToLogin: ()=>setShowSignup(false)
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 87,
+                                lineNumber: 110,
                                 columnNumber: 17
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _loginView.LoginView), {
                                 onLoggedIn: (user, token)=>{
@@ -25087,12 +25118,12 @@ const MainView = ()=>{
                                 onSwitchToSignup: ()=>setShowSignup(true)
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 92,
+                                lineNumber: 115,
                                 columnNumber: 17
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 81,
+                            lineNumber: 104,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25101,18 +25132,18 @@ const MainView = ()=>{
                                 to: "/login"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 106,
+                                lineNumber: 129,
                                 columnNumber: 23
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieView.MovieView), {
                                 movies: movies
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 106,
+                                lineNumber: 129,
                                 columnNumber: 50
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 103,
+                            lineNumber: 126,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25121,7 +25152,7 @@ const MainView = ()=>{
                                 to: "/login"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 114,
+                                lineNumber: 137,
                                 columnNumber: 17
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _profileView.ProfileView), {
                                 user: user,
@@ -25129,29 +25160,29 @@ const MainView = ()=>{
                                 movies: movies
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 116,
+                                lineNumber: 139,
                                 columnNumber: 17
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 110,
+                            lineNumber: 133,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/components/main-view.jsx",
-                    lineNumber: 55,
+                    lineNumber: 61,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 54,
+                lineNumber: 60,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true);
 };
-_s(MainView, "4mgShNNL0CiIFp2ugYrqRC1mxSM=");
+_s(MainView, "mdRjfAn+4LeOlrJYHr6AQ8DH/wQ=");
 _c = MainView;
 var _c;
 $RefreshReg$(_c, "MainView");
@@ -35341,10 +35372,10 @@ var _propTypes = require("prop-types");
 var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 var _reactBootstrap = require("react-bootstrap");
 const MovieModal = ({ movie, user, token, setUser, onClose })=>{
-    const isFavorite = user?.FavoriteMovies?.includes(movie._id);
+    const isfavorite = user?.FavoriteMovies?.includes(movie._id);
     const toggleFavorite = ()=>{
         if (!user || !token) return;
-        const method = isFavorite ? "DELETE" : "POST";
+        const method = isfavorite ? "DELETE" : "POST";
         fetch(`https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}/movies/${movie._id}`, {
             method,
             headers: {
@@ -35470,9 +35501,9 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     columnNumber: 13
                                 }, undefined),
                                 user && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
-                                    variant: isFavorite ? "danger" : "primary",
+                                    variant: isfavorite ? "danger" : "primary",
                                     onClick: toggleFavorite,
-                                    children: isFavorite ? "Remove from Favorites" : "Add to Favorites"
+                                    children: isfavorite ? "Remove from Favorites" : "Add to Favorites"
                                 }, void 0, false, {
                                     fileName: "src/components/movie-modal.jsx",
                                     lineNumber: 51,

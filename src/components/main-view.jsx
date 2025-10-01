@@ -8,7 +8,6 @@ import { ProfileView } from "./profile-view";
 import { NavigationBar } from "./navigation-bar";
 import { Container, Row, Col } from "react-bootstrap";
 
-
 export const MainView = () => {
   const storedUser = (() => {
     try {
@@ -22,7 +21,8 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [showSignup, setShowSignup] = useState(false); // per switch login/signup
+  const [showSignup, setShowSignup] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!token) return;
@@ -32,6 +32,7 @@ export const MainView = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("Fetched movies:", data); // Controlla i campi disponibili
         const moviesWithId = data.map((movie, index) => ({
           ...movie,
           _id: movie._id || index.toString(),
@@ -47,6 +48,11 @@ export const MainView = () => {
     localStorage.clear();
   };
 
+  // Lista filtrata: protegge contro campi mancanti
+  const filteredMovies = movies.filter((movie) =>
+    ((movie.Title || movie.title || "").toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
@@ -61,19 +67,36 @@ export const MainView = () => {
               ) : movies.length === 0 ? (
                 <div className="text-center">The list is empty!</div>
               ) : (
-                <Row className="g-4">
-                  {movies.map((movie) => (
-                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                      <MovieCard
-                        key={movie}
-                        movie={movie}
-                        user={user}
-                        token={token}
-                        setUser={setUser}
-                      />
-                    </Col>
-                  ))}
-                </Row>
+                <>
+                  {/* Search bar */}
+                  <input
+                    type="text"
+                    placeholder="Search movies..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control mb-3"
+                  />
+
+                  <Row className="g-4">
+                    {filteredMovies.map((movie) => (
+                      <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                        <MovieCard
+                          key={movie._id}
+                          movie={movie}
+                          user={user}
+                          token={token}
+                          setUser={setUser}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+
+                  {filteredMovies.length === 0 && (
+                    <div className="text-center mt-3">
+                      No movies found for "{searchTerm}"
+                    </div>
+                  )}
+                </>
               )
             }
           />
