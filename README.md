@@ -38,6 +38,12 @@ git clone https://github.com/your-username/myFlix-client.git
 
 ---
 
+## Live Demo
+
+Check out the live version of **myFlix-client** here: [https://myflixplore.netlify.app](https://myflixplore.netlify.app)
+
+---
+
 ## Reflections
 
 Role & Tasks: Developed the full frontend in React, integrated authentication with JWT, implemented movie search/filter, and styled the app with Bootstrap.
