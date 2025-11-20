@@ -2,6 +2,8 @@ import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 
+const API_URL = "https://myflix-api-0vxe.onrender.com";
+
 export const MovieView = () => {
   const location = useLocation();
   const movie = location.state?.movie;
@@ -10,16 +12,27 @@ export const MovieView = () => {
 
   const { title, description, genre, director, imageURL, year, actors } = movie;
 
-  const posterUrl = imageURL?.startsWith("http")
-    ? imageURL
-    : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${imageURL}`;
+  const posterUrl = imageURL
+    ? imageURL.startsWith("http")
+      ? imageURL
+      : `${API_URL}/img/${imageURL}`
+    : null;
 
   return (
     <Container className="mt-4">
       <Row className="g-4">
         <Col md={4}>
           <Card>
-            <Card.Img variant="top" src={posterUrl} alt={title} />
+            {posterUrl ? (
+              <Card.Img variant="top" src={posterUrl} alt={title} />
+            ) : (
+              <div
+                className="d-flex align-items-center justify-content-center bg-secondary text-white"
+                style={{ height: "400px", borderRadius: "8px" }}
+              >
+                Image not available
+              </div>
+            )}
           </Card>
         </Col>
         <Col md={8}>

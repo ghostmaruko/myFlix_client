@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { MovieCard } from "./movie-card";
+
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 
 export const ProfileView = ({ user, token, movies, setUser }) => {
   const [username, setUsername] = useState(user.username);
@@ -13,29 +15,25 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
   const favoriteMovies = movies.filter((m) =>
     user.favoriteMovies?.includes(m._id)
   );
-  
 
   const handleUpdate = (e) => {
     e.preventDefault();
     setSuccessMessage("");
     setErrorMessage("");
 
-    fetch(
-      `https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          email,
-          birthday,
-        }),
-      }
-    )
+    fetch(`${API_URL}/users/${user.username}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        email,
+        birthday,
+      }),
+    })
       .then((res) => {
         if (!res.ok) throw new Error("Update failed");
         return res.json();
@@ -55,13 +53,10 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
     if (!window.confirm("Are you sure you want to delete your account?"))
       return;
 
-    fetch(
-      `https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}`,
-      {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
+    fetch(`${API_URL}/users/${user.username}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => {
         if (!res.ok) throw new Error("Delete failed");
         localStorage.clear();
@@ -148,7 +143,12 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
         ) : (
           favoriteMovies.map((movie) => (
             <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-              <MovieCard movie={movie} />
+              <MovieCard
+                movie={movie}
+                user={user}
+                token={token}
+                setUser={setUser}
+              />
             </Col>
           ))
         )}

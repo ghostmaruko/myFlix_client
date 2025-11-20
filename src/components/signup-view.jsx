@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Spinner, Card } from "react-bootstrap";
 
+const API_URL = "https://myflix-api-0vxe.onrender.com";
+
 export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +17,7 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
     setError("");
     setIsLoading(true);
 
-    fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/users", {
+    fetch(`${API_URL}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password, email, birthday }),

@@ -3,23 +3,22 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, Row, Col } from "react-bootstrap";
 
+const API_URL = "https://myflix-api-0vxe.onrender.com";
+
 export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
-  const isfavorite = user?.FavoriteMovies?.includes(movie._id);
+  const isFavorite = user?.favoriteMovies?.includes(movie._id);
 
   const toggleFavorite = () => {
     if (!user || !token) return;
 
-    const method = isfavorite ? "DELETE" : "POST";
-    fetch(
-      `https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}/movies/${movie._id}`,
-      {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    const method = isFavorite ? "DELETE" : "POST";
+    fetch(`${API_URL}/users/${user.username}/movies/${movie._id}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((updatedUser) => {
         setUser(updatedUser);
@@ -28,16 +27,31 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
       .catch((err) => console.error(err));
   };
 
+  const imageUrl = movie.imageURL
+    ? movie.imageURL.startsWith("http")
+      ? movie.imageURL
+      : `${API_URL}/img/${movie.imageURL}`
+    : null;
+
   return (
     <Modal show={true} onHide={onClose} size="lg" centered>
       <Modal.Body>
         <Row>
           <Col md={5}>
-            <img
-              src={movie.imageURL}
-              alt={movie.title}
-              style={{ width: "100%", borderRadius: "8px" }}
-            />
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={movie.title}
+                style={{ width: "100%", borderRadius: "8px" }}
+              />
+            ) : (
+              <div
+                className="d-flex align-items-center justify-content-center bg-secondary text-white"
+                style={{ height: "300px", borderRadius: "8px" }}
+              >
+                Image not available
+              </div>
+            )}
           </Col>
           <Col md={7}>
             <h3>{movie.title}</h3>
@@ -48,8 +62,8 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
             <p>{movie.description}</p>
 
             {user && (
-              <Button variant={isfavorite ? "danger" : "primary"} onClick={toggleFavorite}>
-                {isfavorite ? "Remove from Favorites" : "Add to Favorites"}
+              <Button variant={isFavorite ? "danger" : "primary"} onClick={toggleFavorite}>
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
               </Button>
             )}
           </Col>

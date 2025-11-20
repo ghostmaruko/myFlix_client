@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Card } from "react-bootstrap";
 import { MovieModal } from "./movie-modal";
 
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 
 export const MovieCard = ({ movie, user, token, setUser }) => {
   const [showModal, setShowModal] = useState(false);
@@ -10,7 +11,7 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
   const imageUrl = movie.imageURL
     ? movie.imageURL.startsWith("http")
       ? movie.imageURL
-      : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}`
+      : `${API_URL}/img/${movie.imageURL}`
     : null;
 
   return (

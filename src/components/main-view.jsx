@@ -8,6 +8,8 @@ import { ProfileView } from "./profile-view";
 import { NavigationBar } from "./navigation-bar";
 import { Container, Row, Col } from "react-bootstrap";
 
+const API_URL = "https://myflix-api-0vxe.onrender.com";
+
 export const MainView = () => {
   const storedUser = (() => {
     try {
@@ -27,7 +29,7 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/movies", {
+    fetch(`${API_URL}/movies`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -48,7 +50,6 @@ export const MainView = () => {
     localStorage.clear();
   };
 
-  // Lista filtrata: protegge contro campi mancanti
   const filteredMovies = movies.filter((movie) =>
     ((movie.Title || movie.title || "").toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -68,7 +69,6 @@ export const MainView = () => {
                 <div className="text-center">The list is empty!</div>
               ) : (
                 <>
-                  {/* Search bar */}
                   <input
                     type="text"
                     placeholder="Search movies..."
@@ -125,20 +125,16 @@ export const MainView = () => {
 
           <Route
             path="/movies/:movieId"
-            element={
-              !user ? <Navigate to="/login" /> : <MovieView movies={movies} />
-            }
+            element={!user ? <Navigate to="/login" /> : <MovieView movies={movies} />}
           />
 
           <Route
             path="/profile"
-            element={
-              !user ? (
-                <Navigate to="/login" />
-              ) : (
-                <ProfileView user={user} token={token} movies={movies} />
-              )
-            }
+            element={!user ? (
+              <Navigate to="/login" />
+            ) : (
+              <ProfileView user={user} token={token} movies={movies} />
+            )}
           />
         </Routes>
       </Container>
