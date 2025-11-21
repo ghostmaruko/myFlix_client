@@ -26,6 +26,7 @@ export const MainView = () => {
   const [showSignup, setShowSignup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch movies from backend
   useEffect(() => {
     if (!token) return;
 
@@ -37,13 +38,14 @@ export const MainView = () => {
         return res.json();
       })
       .then((data) => {
-        const moviesWithId = data.map((movie, index) => ({ ...movie, _id: movie._id || index.toString() }));
+        const moviesWithId = data.map((movie, index) => ({
+          ...movie,
+          _id: movie._id || index.toString(),
+        }));
         setMovies(moviesWithId);
       })
       .catch((err) => {
         console.error("Fetch error:", err);
-        // In case of auth error, optionally clear token/user
-        // if (err.message.includes("401")) { setToken(null); setUser(null); localStorage.clear(); }
       });
   }, [token]);
 
@@ -54,7 +56,7 @@ export const MainView = () => {
   };
 
   const filteredMovies = movies.filter((movie) =>
-    ((movie.Title || movie.title || "").toLowerCase().includes(searchTerm.toLowerCase()))
+    ((movie.title || movie.Title || "").toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -63,6 +65,7 @@ export const MainView = () => {
 
       <Container className="mt-4">
         <Routes>
+          {/* Home / Movies list */}
           <Route
             path="/"
             element={
@@ -79,7 +82,6 @@ export const MainView = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control mb-3"
                   />
-
                   <Row className="g-4">
                     {filteredMovies.map((movie) => (
                       <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
@@ -87,7 +89,6 @@ export const MainView = () => {
                       </Col>
                     ))}
                   </Row>
-
                   {filteredMovies.length === 0 && (
                     <div className="text-center mt-3">No movies found for "{searchTerm}"</div>
                   )}
@@ -96,13 +97,21 @@ export const MainView = () => {
             }
           />
 
+          {/* Login / Signup */}
           <Route
             path="/login"
             element={
               user ? (
                 <Navigate to="/" />
               ) : showSignup ? (
-                <SignupView onSignedUp={() => setShowSignup(false)} onSwitchToLogin={() => setShowSignup(false)} />
+                <SignupView
+                  onLoggedIn={(user, token) => {
+                    setUser(user);
+                    setToken(token);
+                    setShowSignup(false);
+                  }}
+                  onSwitchToLogin={() => setShowSignup(false)}
+                />
               ) : (
                 <LoginView
                   onLoggedIn={(user, token) => {
@@ -115,9 +124,21 @@ export const MainView = () => {
             }
           />
 
-          <Route path="/movies/:movieId" element={!user ? <Navigate to="/login" /> : <MovieView movies={movies} />} />
+          {/* Movie details */}
+          <Route
+            path="/movies/:movieId"
+            element={!user ? <Navigate to="/login" /> : <MovieView />}
+          />
 
-          <Route path="/profile" element={!user ? <Navigate to="/login" /> : <ProfileView user={user} token={token} movies={movies} setUser={setUser} />} />
+          {/* Profile */}
+          <Route
+            path="/profile"
+            element={!user ? (
+              <Navigate to="/login" />
+            ) : (
+              <ProfileView user={user} token={token} movies={movies} setUser={setUser} />
+            )}
+          />
         </Routes>
       </Container>
     </>

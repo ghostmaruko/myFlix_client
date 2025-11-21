@@ -38,32 +38,16 @@ export const MovieView = () => {
         <Col md={8}>
           <Card>
             <Card.Body>
-              <Card.Title>
-                {title} ({year})
-              </Card.Title>
+              <Card.Title>{title} ({year})</Card.Title>
               <Card.Text>{description}</Card.Text>
             </Card.Body>
             <ListGroup variant="flush">
-              {genre && (
-                <ListGroup.Item>
-                  <strong>Genre:</strong> {genre.name} - {genre.description}
-                </ListGroup.Item>
-              )}
-              {director && (
-                <ListGroup.Item>
-                  <strong>Director:</strong> {director.name} - {director.bio}
-                </ListGroup.Item>
-              )}
-              {actors && actors.length > 0 && (
-                <ListGroup.Item>
-                  <strong>Actors:</strong> {actors.join(", ")}
-                </ListGroup.Item>
-              )}
+              {genre && <ListGroup.Item><strong>Genre:</strong> {genre.name} - {genre.description}</ListGroup.Item>}
+              {director && <ListGroup.Item><strong>Director:</strong> {director.name} - {director.bio}</ListGroup.Item>}
+              {actors?.length > 0 && <ListGroup.Item><strong>Actors:</strong> {actors.join(", ")}</ListGroup.Item>}
             </ListGroup>
             <Card.Body className="mt-2">
-              <Link to="/">
-                <Button variant="primary">Back to Movies</Button>
-              </Link>
+              <Link to="/"><Button variant="primary">Back to Movies</Button></Link>
             </Card.Body>
           </Card>
         </Col>

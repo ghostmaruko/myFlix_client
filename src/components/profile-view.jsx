@@ -27,12 +27,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username,
-        password,
-        email,
-        birthday,
-      }),
+      body: JSON.stringify({ username, password, email, birthday }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Update failed");
@@ -59,7 +54,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
       .then((res) => {
         if (!res.ok) throw new Error("Delete failed");
         localStorage.clear();
-        window.location.href = "/signup"; // redirect
+        window.location.href = "/signup";
       })
       .catch((err) => {
         console.error(err);
@@ -96,6 +91,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Leave blank to keep current"
+                autoComplete="new-password"
               />
             </Form.Group>
           </Col>
@@ -108,6 +104,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="email"
               />
             </Form.Group>
           </Col>
@@ -125,13 +122,8 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
         </Row>
 
         <div className="d-flex gap-2">
-          <Button type="submit" variant="primary">
-            Update Profile
-          </Button>
-
-          <Button variant="danger" onClick={handleDeregister}>
-            Delete Account
-          </Button>
+          <Button type="submit" variant="primary">Update Profile</Button>
+          <Button variant="danger" onClick={handleDeregister}>Delete Account</Button>
         </div>
       </Form>
 

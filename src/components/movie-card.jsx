@@ -16,17 +16,33 @@ export const MovieCard = ({ movie, user, token, setUser }) => {
 
   return (
     <>
-      <Card className="movie-card" onClick={() => setShowModal(true)} style={{ cursor: "pointer" }}>
+      <Card className="movie-card" onClick={() => setShowModal(true)}>
         {imageUrl ? (
-          <Card.Img src={imageUrl} alt={movie.title} className="movie-cover" style={{ borderRadius: "8px", objectFit: "cover", height: "300px" }} />
+          <Card.Img
+            src={imageUrl}
+            alt={movie.title}
+            className="movie-cover"
+            style={{ cursor: "pointer", borderRadius: "8px", objectFit: "cover", height: "300px" }}
+          />
         ) : (
-          <div className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ height: "300px", borderRadius: "8px" }}>
+          <div
+            className="d-flex align-items-center justify-content-center bg-secondary text-white"
+            style={{ height: "300px", borderRadius: "8px" }}
+          >
             Image not available
           </div>
         )}
       </Card>
 
-      {showModal && <MovieModal movie={movie} user={user} token={token} setUser={setUser} onClose={() => setShowModal(false)} />}
+      {showModal && (
+        <MovieModal
+          movie={movie}
+          user={user}
+          token={token}
+          setUser={setUser}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </>
   );
 };

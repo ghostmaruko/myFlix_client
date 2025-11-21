@@ -21,17 +21,18 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
       body: JSON.stringify({ username, password }),
     })
       .then((res) => {
-        setIsLoading(false);
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        if (data.user && data.token) {
+        setIsLoading(false);
+        if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
-          onLoggedIn && onLoggedIn(data.user, data.token);
+          onLoggedIn(data.user, data.token);
         } else {
           setError("Login failed. Check your username and password.");
+          setPassword("");
           setShake(true);
           setTimeout(() => setShake(false), 500);
         }
@@ -40,14 +41,21 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
         console.error("Login error:", e);
         setIsLoading(false);
         setError("Something went wrong. Try again later.");
+        setPassword("");
         setShake(true);
         setTimeout(() => setShake(false), 500);
       });
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
-      <Card className={`p-4 shadow ${shake ? "shake" : ""}`} style={{ width: "100%", maxWidth: "400px" }}>
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "80vh" }}
+    >
+      <Card
+        className={`p-4 shadow ${shake ? "shake" : ""}`}
+        style={{ width: "100%", maxWidth: "400px" }}
+      >
         <Card.Body>
           <h2 className="mb-4 text-center">Login</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -55,18 +63,44 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="loginUsername">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required placeholder="Enter Username" />
+              <Form.Control
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                placeholder="Enter Username"
+                autoComplete="username"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="loginPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Enter Password" />
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Enter Password"
+                autoComplete="current-password"
+              />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isLoading}>
+            <Button
+              variant="primary"
+              type="submit"
+              className="w-100 mb-3"
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <>
-                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> Logging in...
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />{" "}
+                  Logging in...
                 </>
               ) : (
                 "Login"
@@ -77,7 +111,11 @@ export const LoginView = ({ onLoggedIn, onSwitchToSignup }) => {
           <div className="text-center">
             <small>
               Non hai un account?{" "}
-              <Button variant="link" onClick={onSwitchToSignup} style={{ padding: 0 }}>
+              <Button
+                variant="link"
+                onClick={onSwitchToSignup}
+                style={{ padding: 0 }}
+              >
                 Registrati
               </Button>
             </small>

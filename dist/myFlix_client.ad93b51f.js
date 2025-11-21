@@ -160,7 +160,7 @@
       });
     }
   }
-})({"lljV9":[function(require,module,exports,__globalThis) {
+})({"hiyDA":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -702,7 +702,7 @@ root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Browser
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react-dom/client":"hrvwu","./components/main-view":"8KClz","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react":"jMk1U","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","bootstrap/dist/css/bootstrap.min.css":"i5LP7","./index.scss":"lJZlQ"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react-dom/client":"hrvwu","./components/main-view":"8KClz","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","bootstrap/dist/css/bootstrap.min.css":"i5LP7","./index.scss":"lJZlQ"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -24968,6 +24968,7 @@ var _profileView = require("./profile-view");
 var _navigationBar = require("./navigation-bar");
 var _reactBootstrap = require("react-bootstrap");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const MainView = ()=>{
     _s();
     const storedUser = (()=>{
@@ -24983,20 +24984,25 @@ const MainView = ()=>{
     const [movies, setMovies] = (0, _react.useState)([]);
     const [showSignup, setShowSignup] = (0, _react.useState)(false);
     const [searchTerm, setSearchTerm] = (0, _react.useState)("");
+    // Fetch movies from backend
     (0, _react.useEffect)(()=>{
         if (!token) return;
-        fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/movies", {
+        fetch(`${API_URL}/movies`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }).then((res)=>res.json()).then((data)=>{
-            console.log("Fetched movies:", data); // Controlla i campi disponibili
+        }).then((res)=>{
+            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+            return res.json();
+        }).then((data)=>{
             const moviesWithId = data.map((movie, index)=>({
                     ...movie,
                     _id: movie._id || index.toString()
                 }));
             setMovies(moviesWithId);
-        }).catch((err)=>console.error("Fetch error:", err));
+        }).catch((err)=>{
+            console.error("Fetch error:", err);
+        });
     }, [
         token
     ]);
@@ -25005,8 +25011,7 @@ const MainView = ()=>{
         setToken(null);
         localStorage.clear();
     };
-    // Lista filtrata: protegge contro campi mancanti
-    const filteredMovies = movies.filter((movie)=>(movie.Title || movie.title || "").toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredMovies = movies.filter((movie)=>(movie.title || movie.Title || "").toLowerCase().includes(searchTerm.toLowerCase()));
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _navigationBar.NavigationBar), {
@@ -25014,7 +25019,7 @@ const MainView = ()=>{
                 onLogout: handleLogout
             }, void 0, false, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 58,
+                lineNumber: 64,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Container), {
@@ -25027,14 +25032,14 @@ const MainView = ()=>{
                                 to: "/login"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 66,
+                                lineNumber: 73,
                                 columnNumber: 17
                             }, void 0) : movies.length === 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                                 className: "text-center",
                                 children: "The list is empty!"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 68,
+                                lineNumber: 75,
                                 columnNumber: 17
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                 children: [
@@ -25046,7 +25051,7 @@ const MainView = ()=>{
                                         className: "form-control mb-3"
                                     }, void 0, false, {
                                         fileName: "src/components/main-view.jsx",
-                                        lineNumber: 72,
+                                        lineNumber: 78,
                                         columnNumber: 19
                                     }, void 0),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
@@ -25061,19 +25066,19 @@ const MainView = ()=>{
                                                     user: user,
                                                     token: token,
                                                     setUser: setUser
-                                                }, movie._id, false, {
+                                                }, void 0, false, {
                                                     fileName: "src/components/main-view.jsx",
-                                                    lineNumber: 83,
+                                                    lineNumber: 88,
                                                     columnNumber: 25
                                                 }, void 0)
                                             }, movie._id, false, {
                                                 fileName: "src/components/main-view.jsx",
-                                                lineNumber: 82,
+                                                lineNumber: 87,
                                                 columnNumber: 23
                                             }, void 0))
                                     }, void 0, false, {
                                         fileName: "src/components/main-view.jsx",
-                                        lineNumber: 80,
+                                        lineNumber: 85,
                                         columnNumber: 19
                                     }, void 0),
                                     filteredMovies.length === 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -25085,14 +25090,14 @@ const MainView = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/components/main-view.jsx",
-                                        lineNumber: 95,
+                                        lineNumber: 93,
                                         columnNumber: 21
                                     }, void 0)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 62,
+                            lineNumber: 69,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25101,14 +25106,18 @@ const MainView = ()=>{
                                 to: "/"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 108,
+                                lineNumber: 105,
                                 columnNumber: 17
                             }, void 0) : showSignup ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _signupView.SignupView), {
-                                onSignedUp: ()=>setShowSignup(false),
+                                onLoggedIn: (user, token)=>{
+                                    setUser(user);
+                                    setToken(token);
+                                    setShowSignup(false);
+                                },
                                 onSwitchToLogin: ()=>setShowSignup(false)
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 110,
+                                lineNumber: 107,
                                 columnNumber: 17
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _loginView.LoginView), {
                                 onLoggedIn: (user, token)=>{
@@ -25118,12 +25127,12 @@ const MainView = ()=>{
                                 onSwitchToSignup: ()=>setShowSignup(true)
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 115,
+                                lineNumber: 116,
                                 columnNumber: 17
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 104,
+                            lineNumber: 101,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25132,18 +25141,16 @@ const MainView = ()=>{
                                 to: "/login"
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 129,
-                                columnNumber: 23
-                            }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieView.MovieView), {
-                                movies: movies
-                            }, void 0, false, {
+                                lineNumber: 130,
+                                columnNumber: 30
+                            }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieView.MovieView), {}, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
-                                lineNumber: 129,
-                                columnNumber: 50
+                                lineNumber: 130,
+                                columnNumber: 57
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 126,
+                            lineNumber: 128,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -25153,30 +25160,31 @@ const MainView = ()=>{
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
                                 lineNumber: 137,
-                                columnNumber: 17
+                                columnNumber: 15
                             }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _profileView.ProfileView), {
                                 user: user,
                                 token: token,
-                                movies: movies
+                                movies: movies,
+                                setUser: setUser
                             }, void 0, false, {
                                 fileName: "src/components/main-view.jsx",
                                 lineNumber: 139,
-                                columnNumber: 17
+                                columnNumber: 15
                             }, void 0)
                         }, void 0, false, {
                             fileName: "src/components/main-view.jsx",
-                            lineNumber: 133,
+                            lineNumber: 134,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/components/main-view.jsx",
-                    lineNumber: 61,
+                    lineNumber: 67,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/main-view.jsx",
-                lineNumber: 60,
+                lineNumber: 66,
                 columnNumber: 7
             }, undefined)
         ]
@@ -25192,7 +25200,7 @@ $RefreshReg$(_c, "MainView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./movie-card":"edT5A","./movie-view":"5EGNp","./login-view":"6RKLx","./signup-view":"4s1oo","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react-bootstrap":"ctEhb","react-router-dom":"61z4w","./profile-view":"a5Sdh","./navigation-bar":"3WSqp"}],"edT5A":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./movie-card":"edT5A","./movie-view":"5EGNp","./login-view":"6RKLx","./signup-view":"4s1oo","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-bootstrap":"ctEhb","react-router-dom":"61z4w","./profile-view":"a5Sdh","./navigation-bar":"3WSqp"}],"edT5A":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$8e3c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$8e3c.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -25211,10 +25219,11 @@ var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 var _reactBootstrap = require("react-bootstrap");
 var _movieModal = require("./movie-modal");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const MovieCard = ({ movie, user, token, setUser })=>{
     _s();
     const [showModal, setShowModal] = (0, _react.useState)(false);
-    const imageUrl = movie.imageURL ? movie.imageURL.startsWith("http") ? movie.imageURL : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${movie.imageURL}` : null;
+    const imageUrl = movie.imageURL ? movie.imageURL.startsWith("http") ? movie.imageURL : `${API_URL}/img/${movie.imageURL}` : null;
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card), {
@@ -25232,7 +25241,7 @@ const MovieCard = ({ movie, user, token, setUser })=>{
                     }
                 }, void 0, false, {
                     fileName: "src/components/movie-card.jsx",
-                    lineNumber: 20,
+                    lineNumber: 21,
                     columnNumber: 11
                 }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                     className: "d-flex align-items-center justify-content-center bg-secondary text-white",
@@ -25243,12 +25252,12 @@ const MovieCard = ({ movie, user, token, setUser })=>{
                     children: "Image not available"
                 }, void 0, false, {
                     fileName: "src/components/movie-card.jsx",
-                    lineNumber: 27,
+                    lineNumber: 28,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/movie-card.jsx",
-                lineNumber: 18,
+                lineNumber: 19,
                 columnNumber: 7
             }, undefined),
             showModal && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieModal.MovieModal), {
@@ -25259,7 +25268,7 @@ const MovieCard = ({ movie, user, token, setUser })=>{
                 onClose: ()=>setShowModal(false)
             }, void 0, false, {
                 fileName: "src/components/movie-card.jsx",
-                lineNumber: 37,
+                lineNumber: 38,
                 columnNumber: 9
             }, undefined)
         ]
@@ -25281,7 +25290,7 @@ $RefreshReg$(_c, "MovieCard");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react-bootstrap":"ctEhb","./movie-modal":"ea711"}],"GNqOQ":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-bootstrap":"ctEhb","./movie-modal":"ea711"}],"GNqOQ":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -26028,7 +26037,7 @@ printWarning = function(text) {
 };
 module.exports = checkPropTypes;
 
-},{"24ba1e58d167a82c":"ggXkd","898bc82f39d83f7c":"cnEYJ"}],"a3DI0":[function(require,module,exports,__globalThis) {
+},{"24ba1e58d167a82c":"ggXkd","898bc82f39d83f7c":"cnEYJ"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -26058,9 +26067,9 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"gCipM":[function(require,module,exports,__globalThis) {
+},{}],"7h6Pi":[function(require,module,exports,__globalThis) {
 "use strict";
-var Refresh = require("2beaf291acef644e");
+var Refresh = require("7422ead32dcc1e6b");
 function debounce(func, delay) {
     {
         let timeout = undefined;
@@ -26098,7 +26107,7 @@ module.exports.init = function() {
             };
         };
         if (typeof window !== 'undefined') {
-            let ErrorOverlay = require("88d166b17120dc2b");
+            let ErrorOverlay = require("e4d875b7642f9496");
             ErrorOverlay.setEditorHandler(function(errorLocation) {
                 let file = `${errorLocation.fileName}:${errorLocation.lineNumber || 1}:${errorLocation.colNumber || 1}`;
                 fetch(module.bundle.devServer + `/__parcel_launch_editor?file=${encodeURIComponent(file)}`);
@@ -26221,11 +26230,11 @@ function registerExportsForReactRefresh(module1) {
     }
 }
 
-},{"2beaf291acef644e":"lwyak","88d166b17120dc2b":"gPcom"}],"lwyak":[function(require,module,exports,__globalThis) {
+},{"7422ead32dcc1e6b":"hpiFP","e4d875b7642f9496":"gnoim"}],"hpiFP":[function(require,module,exports,__globalThis) {
 'use strict';
-module.exports = require("d295eb966e23b4f");
+module.exports = require("96622d495519d4e");
 
-},{"d295eb966e23b4f":"bs5Zw"}],"bs5Zw":[function(require,module,exports,__globalThis) {
+},{"96622d495519d4e":"7AD9f"}],"7AD9f":[function(require,module,exports,__globalThis) {
 /**
  * @license React
  * react-refresh-runtime.development.js
@@ -26461,7 +26470,7 @@ module.exports = require("d295eb966e23b4f");
     exports.setSignature = setSignature;
 })();
 
-},{}],"gPcom":[function(require,module,exports,__globalThis) {
+},{}],"gnoim":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "setEditorHandler", ()=>$da9882e673ac146b$export$25a22ac46f1bd016);
@@ -28336,7 +28345,7 @@ function $da9882e673ac146b$var$ErrorOverlay() {
     return null;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ctEhb":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ctEhb":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Accordion", ()=>(0, _accordionDefault.default));
@@ -28674,7 +28683,7 @@ var _toggleButtonGroupDefault = parcelHelpers.interopDefault(_toggleButtonGroup)
 var _tooltip = require("./Tooltip");
 var _tooltipDefault = parcelHelpers.interopDefault(_tooltip);
 
-},{"./Accordion":false,"./AccordionContext":false,"./AccordionCollapse":false,"./AccordionButton":false,"./AccordionBody":false,"./AccordionHeader":false,"./AccordionItem":false,"./Alert":"aR4Gi","./AlertHeading":false,"./AlertLink":false,"./Anchor":false,"./Badge":false,"./Breadcrumb":false,"./BreadcrumbItem":false,"./Button":"kNKIo","./ButtonGroup":false,"./ButtonToolbar":false,"./Card":"56ajS","./CardBody":false,"./CardFooter":false,"./CardGroup":false,"./CardHeader":false,"./CardImg":false,"./CardImgOverlay":false,"./CardLink":false,"./CardSubtitle":false,"./CardText":false,"./CardTitle":false,"./Carousel":false,"./CarouselCaption":false,"./CarouselItem":false,"./CloseButton":false,"./Col":"6x0qd","./Collapse":false,"./Container":"2GCvr","./Dropdown":false,"./DropdownButton":false,"./DropdownDivider":false,"./DropdownHeader":false,"./DropdownItem":false,"./DropdownItemText":false,"./DropdownMenu":false,"./DropdownToggle":false,"./Fade":false,"./Figure":false,"./FigureCaption":false,"./FigureImage":false,"./Form":"6LPqw","./FormControl":false,"./FormCheck":false,"./FormFloating":false,"./FloatingLabel":false,"./FormGroup":false,"./FormLabel":false,"./FormText":false,"./FormSelect":false,"./Image":false,"./InputGroup":false,"./ListGroup":"av3gS","./ListGroupItem":false,"./Modal":"dj8kw","./ModalBody":false,"./ModalDialog":false,"./ModalFooter":false,"./ModalHeader":false,"./ModalTitle":false,"./Nav":"8jrcb","./Navbar":"2Lmwo","./NavbarBrand":false,"./NavbarCollapse":false,"./NavbarOffcanvas":false,"./NavbarText":false,"./NavbarToggle":false,"./NavDropdown":false,"./NavItem":false,"./NavLink":false,"./Offcanvas":false,"./OffcanvasBody":false,"./OffcanvasHeader":false,"./OffcanvasTitle":false,"./OffcanvasToggling":false,"./Overlay":false,"./OverlayTrigger":false,"./PageItem":false,"./Pagination":false,"./Placeholder":false,"./PlaceholderButton":false,"./Popover":false,"./PopoverBody":false,"./PopoverHeader":false,"./ProgressBar":false,"./Ratio":false,"./Row":"2DPD4","./Spinner":"4p9zi","./SplitButton":false,"./SSRProvider":false,"./Stack":false,"./Tab":false,"./TabContainer":false,"./TabContent":false,"./Table":false,"./TabPane":false,"./Tabs":false,"./ThemeProvider":false,"./Toast":false,"./ToastBody":false,"./ToastContainer":false,"./ToastHeader":false,"./ToggleButton":false,"./ToggleButtonGroup":false,"./Tooltip":false,"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"aR4Gi":[function(require,module,exports,__globalThis) {
+},{"./Accordion":false,"./AccordionContext":false,"./AccordionCollapse":false,"./AccordionButton":false,"./AccordionBody":false,"./AccordionHeader":false,"./AccordionItem":false,"./Alert":"aR4Gi","./AlertHeading":false,"./AlertLink":false,"./Anchor":false,"./Badge":false,"./Breadcrumb":false,"./BreadcrumbItem":false,"./Button":"kNKIo","./ButtonGroup":false,"./ButtonToolbar":false,"./Card":"56ajS","./CardBody":false,"./CardFooter":false,"./CardGroup":false,"./CardHeader":false,"./CardImg":false,"./CardImgOverlay":false,"./CardLink":false,"./CardSubtitle":false,"./CardText":false,"./CardTitle":false,"./Carousel":false,"./CarouselCaption":false,"./CarouselItem":false,"./CloseButton":false,"./Col":"6x0qd","./Collapse":false,"./Container":"2GCvr","./Dropdown":false,"./DropdownButton":false,"./DropdownDivider":false,"./DropdownHeader":false,"./DropdownItem":false,"./DropdownItemText":false,"./DropdownMenu":false,"./DropdownToggle":false,"./Fade":false,"./Figure":false,"./FigureCaption":false,"./FigureImage":false,"./Form":"6LPqw","./FormControl":false,"./FormCheck":false,"./FormFloating":false,"./FloatingLabel":false,"./FormGroup":false,"./FormLabel":false,"./FormText":false,"./FormSelect":false,"./Image":false,"./InputGroup":false,"./ListGroup":"av3gS","./ListGroupItem":false,"./Modal":"dj8kw","./ModalBody":false,"./ModalDialog":false,"./ModalFooter":false,"./ModalHeader":false,"./ModalTitle":false,"./Nav":"8jrcb","./Navbar":"2Lmwo","./NavbarBrand":false,"./NavbarCollapse":false,"./NavbarOffcanvas":false,"./NavbarText":false,"./NavbarToggle":false,"./NavDropdown":false,"./NavItem":false,"./NavLink":false,"./Offcanvas":false,"./OffcanvasBody":false,"./OffcanvasHeader":false,"./OffcanvasTitle":false,"./OffcanvasToggling":false,"./Overlay":false,"./OverlayTrigger":false,"./PageItem":false,"./Pagination":false,"./Placeholder":false,"./PlaceholderButton":false,"./Popover":false,"./PopoverBody":false,"./PopoverHeader":false,"./ProgressBar":false,"./Ratio":false,"./Row":"2DPD4","./Spinner":"4p9zi","./SplitButton":false,"./SSRProvider":false,"./Stack":false,"./Tab":false,"./TabContainer":false,"./TabContent":false,"./Table":false,"./TabPane":false,"./Tabs":false,"./ThemeProvider":false,"./Toast":false,"./ToastBody":false,"./ToastContainer":false,"./ToastHeader":false,"./ToggleButton":false,"./ToggleButtonGroup":false,"./Tooltip":false,"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aR4Gi":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -28732,7 +28741,7 @@ exports.default = Object.assign(Alert, {
     Heading: (0, _alertHeadingDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","uncontrollable":"eKG0k","@restart/hooks/useEventCallback":"2uLwi","./ThemeProvider":"gulxC","./AlertHeading":"auIEK","./AlertLink":"gnGk0","./Fade":"kNoMh","./CloseButton":"4dv1h","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"Egwmr":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","uncontrollable":"eKG0k","@restart/hooks/useEventCallback":"2uLwi","./ThemeProvider":"gulxC","./AlertHeading":"auIEK","./AlertLink":"gnGk0","./Fade":"kNoMh","./CloseButton":"4dv1h","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"Egwmr":[function(require,module,exports,__globalThis) {
 /*!
 	Copyright (c) 2018 Jed Watson.
 	Licensed under the MIT License (MIT), see
@@ -28783,7 +28792,7 @@ var _hookDefault = parcelHelpers.interopDefault(_hook);
 var _uncontrollable = require("./uncontrollable");
 var _uncontrollableDefault = parcelHelpers.interopDefault(_uncontrollable);
 
-},{"./hook":"bzIgv","./uncontrollable":"gKGW4","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bzIgv":[function(require,module,exports,__globalThis) {
+},{"./hook":"bzIgv","./uncontrollable":"gKGW4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzIgv":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useUncontrolledProp", ()=>useUncontrolledProp);
@@ -28844,7 +28853,7 @@ function useUncontrolled(props, config) {
     }, props);
 }
 
-},{"@babel/runtime/helpers/esm/extends":"20my9","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","react":"jMk1U","./utils":"lvEXZ","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"20my9":[function(require,module,exports,__globalThis) {
+},{"@babel/runtime/helpers/esm/extends":"20my9","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","react":"jMk1U","./utils":"lvEXZ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"20my9":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>_extends);
@@ -28858,7 +28867,7 @@ function _extends() {
     }, _extends.apply(null, arguments);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"fls88":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fls88":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>_objectWithoutPropertiesLoose);
@@ -28872,7 +28881,7 @@ function _objectWithoutPropertiesLoose(r, e) {
     return t;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"lvEXZ":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lvEXZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "uncontrolledPropTypes", ()=>uncontrolledPropTypes);
@@ -28917,7 +28926,7 @@ function canAcceptRef(component) {
     return !!component && (typeof component !== 'function' || component.prototype && component.prototype.isReactComponent);
 }
 
-},{"invariant":"cjjDY","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cjjDY":[function(require,module,exports,__globalThis) {
+},{"invariant":"cjjDY","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cjjDY":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -29105,7 +29114,7 @@ function uncontrollable(Component, controlledValues, methods) {
     return WrappedComponent;
 }
 
-},{"@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","@babel/runtime/helpers/esm/extends":"20my9","@babel/runtime/helpers/esm/inheritsLoose":"jDIko","react":"jMk1U","react-lifecycles-compat":"9nhrx","invariant":"cjjDY","./utils":"lvEXZ","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"jDIko":[function(require,module,exports,__globalThis) {
+},{"@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","@babel/runtime/helpers/esm/extends":"20my9","@babel/runtime/helpers/esm/inheritsLoose":"jDIko","react":"jMk1U","react-lifecycles-compat":"9nhrx","invariant":"cjjDY","./utils":"lvEXZ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jDIko":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>_inheritsLoose);
@@ -29115,7 +29124,7 @@ function _inheritsLoose(t, o) {
     t.prototype = Object.create(o.prototype), t.prototype.constructor = t, (0, _setPrototypeOfJsDefault.default)(t, o);
 }
 
-},{"./setPrototypeOf.js":"5Brd2","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5Brd2":[function(require,module,exports,__globalThis) {
+},{"./setPrototypeOf.js":"5Brd2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5Brd2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>_setPrototypeOf);
@@ -29125,7 +29134,7 @@ function _setPrototypeOf(t, e) {
     }, _setPrototypeOf(t, e);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9nhrx":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9nhrx":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -29218,7 +29227,7 @@ function polyfill(Component) {
     return Component;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2uLwi":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2uLwi":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useEventCallback);
@@ -29234,7 +29243,7 @@ function useEventCallback(fn) {
     ]);
 }
 
-},{"react":"jMk1U","./useCommittedRef":"MOJLD","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"MOJLD":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useCommittedRef":"MOJLD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"MOJLD":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -29257,7 +29266,7 @@ var _react = require("react");
 }
 exports.default = useCommittedRef;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gulxC":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gulxC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DEFAULT_BREAKPOINTS", ()=>DEFAULT_BREAKPOINTS);
@@ -29341,7 +29350,7 @@ function createBootstrapComponent(Component, opts) {
 }
 exports.default = ThemeProvider;
 
-},{"react":"jMk1U","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"05iiF":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"05iiF":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("c4c10cbba9862d5f");
 
@@ -30225,7 +30234,7 @@ const AlertHeading = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as:
 AlertHeading.displayName = 'AlertHeading';
 exports.default = AlertHeading;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7NpDo":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7NpDo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30239,7 +30248,7 @@ exports.default = (className)=>/*#__PURE__*/ // eslint-disable-next-line react/d
             className: (0, _classnamesDefault.default)(p.className, className)
         }));
 
-},{"react":"jMk1U","classnames":"Egwmr","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gnGk0":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gnGk0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30261,7 +30270,7 @@ const AlertLink = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Co
 AlertLink.displayName = 'AlertLink';
 exports.default = AlertLink;
 
-},{"react":"jMk1U","classnames":"Egwmr","@restart/ui/Anchor":"izuD6","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"izuD6":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","@restart/ui/Anchor":"izuD6","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"izuD6":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "isTrivialHref", ()=>isTrivialHref);
@@ -30310,7 +30319,7 @@ function isTrivialHref(href) {
 Anchor.displayName = 'Anchor';
 exports.default = Anchor;
 
-},{"react":"jMk1U","@restart/hooks":"gOAQr","./Button":"cxoj5","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gOAQr":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@restart/hooks":"gOAQr","./Button":"cxoj5","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gOAQr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useCallbackRef", ()=>(0, _useCallbackRefDefault.default));
@@ -30353,7 +30362,7 @@ var _useImageDefault = parcelHelpers.interopDefault(_useImage);
 var _useResizeObserver = require("./useResizeObserver");
 var _useResizeObserverDefault = parcelHelpers.interopDefault(_useResizeObserver);
 
-},{"./useCallbackRef":"aKtCQ","./useCommittedRef":"9bfB7","./useEventCallback":"8ZwAX","./useEventListener":"7dwxj","./useGlobalListener":"iViIO","./useInterval":"8DMeg","./useRafInterval":"7LbZF","./useMergeState":"hE1EN","./useMergeStateFromProps":"Ihwve","./useMounted":"gvzMX","./usePrevious":"6qj9r","./useImage":"4db96","./useResizeObserver":"5YfPu","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"aKtCQ":[function(require,module,exports,__globalThis) {
+},{"./useCallbackRef":"aKtCQ","./useCommittedRef":"9bfB7","./useEventCallback":"8ZwAX","./useEventListener":"7dwxj","./useGlobalListener":"iViIO","./useInterval":"8DMeg","./useRafInterval":"7LbZF","./useMergeState":"hE1EN","./useMergeStateFromProps":"Ihwve","./useMounted":"gvzMX","./usePrevious":"6qj9r","./useImage":"4db96","./useResizeObserver":"5YfPu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aKtCQ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useCallbackRef);
@@ -30362,7 +30371,7 @@ function useCallbackRef() {
     return (0, _react.useState)(null);
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9bfB7":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9bfB7":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30385,7 +30394,7 @@ var _react = require("react");
 }
 exports.default = useCommittedRef;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"8ZwAX":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8ZwAX":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useEventCallback);
@@ -30401,7 +30410,7 @@ function useEventCallback(fn) {
     ]);
 }
 
-},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7dwxj":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7dwxj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useEventListener);
@@ -30419,7 +30428,7 @@ function useEventListener(eventTarget, event, listener, capture = false) {
     ]);
 }
 
-},{"react":"jMk1U","./useEventCallback":"8ZwAX","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"iViIO":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useEventCallback":"8ZwAX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"iViIO":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useGlobalListener);
@@ -30431,7 +30440,7 @@ function useGlobalListener(event, handler, capture = false) {
     return (0, _useEventListenerDefault.default)(documentTarget, event, handler, capture);
 }
 
-},{"./useEventListener":"7dwxj","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"8DMeg":[function(require,module,exports,__globalThis) {
+},{"./useEventListener":"7dwxj","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8DMeg":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30517,7 +30526,7 @@ var _useCommittedRefDefault = parcelHelpers.interopDefault(_useCommittedRef);
 }
 exports.default = useInterval;
 
-},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7LbZF":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7LbZF":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30548,7 +30557,7 @@ function useRafInterval(fn, ms, paused = false) {
 }
 exports.default = useRafInterval;
 
-},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"hE1EN":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useCommittedRef":"9bfB7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hE1EN":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useMergeState);
@@ -30571,7 +30580,7 @@ function useMergeState(initialState) {
     ];
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"Ihwve":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"Ihwve":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useMergeStateFromProps);
@@ -30587,7 +30596,7 @@ function useMergeStateFromProps(props, gDSFP, initialState) {
     ];
 }
 
-},{"./useMergeState":"hE1EN","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gvzMX":[function(require,module,exports,__globalThis) {
+},{"./useMergeState":"hE1EN","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gvzMX":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useMounted);
@@ -30604,7 +30613,7 @@ function useMounted() {
     return isMounted.current;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"6qj9r":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6qj9r":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>usePrevious);
@@ -30617,7 +30626,7 @@ function usePrevious(value) {
     return ref.current;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4db96":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4db96":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useImage);
@@ -30669,7 +30678,7 @@ function useImage(imageOrUrl, crossOrigin) {
     return state;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5YfPu":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5YfPu":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useResizeObserver);
@@ -30705,7 +30714,7 @@ function useResizeObserver(element) {
     return rect;
 }
 
-},{"react":"jMk1U","./useIsomorphicEffect":"2D2VF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2D2VF":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useIsomorphicEffect":"2D2VF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2D2VF":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -30723,7 +30732,7 @@ const isDOM = typeof document !== 'undefined';
  * @category effects
  */ exports.default = isDOM || isReactNative ? (0, _react.useLayoutEffect) : (0, _react.useEffect);
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cxoj5":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cxoj5":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "isTrivialHref", ()=>isTrivialHref);
@@ -30810,7 +30819,7 @@ const Button = /*#__PURE__*/ _react.forwardRef((_ref, ref)=>{
 Button.displayName = 'Button';
 exports.default = Button;
 
-},{"react":"jMk1U","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kNoMh":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kNoMh":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -30859,7 +30868,7 @@ const Fade = /*#__PURE__*/ _react.forwardRef(({ className, children, transitionC
 Fade.displayName = 'Fade';
 exports.default = Fade;
 
-},{"classnames":"Egwmr","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./triggerBrowserReflow":"dWP0P","./TransitionWrapper":"bGHRH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"hAmWn":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./triggerBrowserReflow":"dWP0P","./TransitionWrapper":"bGHRH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hAmWn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "UNMOUNTED", ()=>UNMOUNTED);
@@ -31375,14 +31384,14 @@ Transition.ENTERED = ENTERED;
 Transition.EXITING = EXITING;
 exports.default = Transition;
 
-},{"@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","@babel/runtime/helpers/esm/inheritsLoose":"jDIko","prop-types":"GNqOQ","react":"jMk1U","react-dom":"i4X7T","./config":"5BfDx","./utils/PropTypes":"cWwSk","./TransitionGroupContext":"02D2e","./utils/reflow":"962ni","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5BfDx":[function(require,module,exports,__globalThis) {
+},{"@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"fls88","@babel/runtime/helpers/esm/inheritsLoose":"jDIko","prop-types":"GNqOQ","react":"jMk1U","react-dom":"i4X7T","./config":"5BfDx","./utils/PropTypes":"cWwSk","./TransitionGroupContext":"02D2e","./utils/reflow":"962ni","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5BfDx":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = {
     disabled: false
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cWwSk":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cWwSk":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "timeoutsShape", ()=>timeoutsShape);
@@ -31414,14 +31423,14 @@ var classNamesShape = (0, _propTypesDefault.default).oneOfType([
     })
 ]);
 
-},{"prop-types":"GNqOQ","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"02D2e":[function(require,module,exports,__globalThis) {
+},{"prop-types":"GNqOQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"02D2e":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 exports.default = (0, _reactDefault.default).createContext(null);
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"962ni":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"962ni":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "forceReflow", ()=>forceReflow);
@@ -31429,7 +31438,7 @@ var forceReflow = function forceReflow(node) {
     return node.scrollTop;
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9WvAD":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9WvAD":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "isEscKey", ()=>isEscKey);
@@ -31454,7 +31463,7 @@ function getChildRef(element) {
     return childRef;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"emmfn":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"emmfn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>transitionEndListener);
@@ -31478,7 +31487,7 @@ function transitionEndListener(element, handler) {
     }, duration + delay);
 }
 
-},{"dom-helpers/css":"7SRnC","dom-helpers/transitionEnd":"5CVci","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7SRnC":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/css":"7SRnC","dom-helpers/transitionEnd":"5CVci","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7SRnC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getComputedStyle = require("./getComputedStyle");
@@ -31502,7 +31511,7 @@ function style(node, property) {
 }
 exports.default = style;
 
-},{"./getComputedStyle":"2L5kZ","./hyphenateStyle":"b0nB2","./isTransform":"4pPoG","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2L5kZ":[function(require,module,exports,__globalThis) {
+},{"./getComputedStyle":"2L5kZ","./hyphenateStyle":"b0nB2","./isTransform":"4pPoG","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2L5kZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getComputedStyle);
@@ -31512,7 +31521,7 @@ function getComputedStyle(node, psuedoElement) {
     return (0, _ownerWindowDefault.default)(node).getComputedStyle(node, psuedoElement);
 }
 
-},{"./ownerWindow":"4v6i4","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4v6i4":[function(require,module,exports,__globalThis) {
+},{"./ownerWindow":"4v6i4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4v6i4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>ownerWindow);
@@ -31523,7 +31532,7 @@ function ownerWindow(node) {
     return doc && doc.defaultView || window;
 }
 
-},{"./ownerDocument":"isOL7","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"isOL7":[function(require,module,exports,__globalThis) {
+},{"./ownerDocument":"isOL7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"isOL7":[function(require,module,exports,__globalThis) {
 /**
  * Returns the owner document of a given element.
  * 
@@ -31535,7 +31544,7 @@ function ownerDocument(node) {
     return node && node.ownerDocument || document;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"b0nB2":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"b0nB2":[function(require,module,exports,__globalThis) {
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31550,7 +31559,7 @@ function hyphenateStyleName(string) {
     return (0, _hyphenateDefault.default)(string).replace(msPattern, '-ms-');
 }
 
-},{"./hyphenate":"ihrlw","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ihrlw":[function(require,module,exports,__globalThis) {
+},{"./hyphenate":"ihrlw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ihrlw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>hyphenate);
@@ -31559,7 +31568,7 @@ function hyphenate(string) {
     return string.replace(rUpper, '-$1').toLowerCase();
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4pPoG":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4pPoG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>isTransform);
@@ -31568,7 +31577,7 @@ function isTransform(value) {
     return !!(value && supportedTransforms.test(value));
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5CVci":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5CVci":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>transitionEnd);
@@ -31609,7 +31618,7 @@ function transitionEnd(element, handler, duration, padding) {
     };
 }
 
-},{"./css":"7SRnC","./listen":"kIFKz","./triggerEvent":"303IT","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kIFKz":[function(require,module,exports,__globalThis) {
+},{"./css":"7SRnC","./listen":"kIFKz","./triggerEvent":"303IT","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kIFKz":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _addEventListener = require("./addEventListener");
@@ -31624,7 +31633,7 @@ function listen(node, eventName, handler, options) {
 }
 exports.default = listen;
 
-},{"./addEventListener":"btM1W","./removeEventListener":"iZl0A","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"btM1W":[function(require,module,exports,__globalThis) {
+},{"./addEventListener":"btM1W","./removeEventListener":"iZl0A","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"btM1W":[function(require,module,exports,__globalThis) {
 /* eslint-disable no-return-assign */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "optionsSupported", ()=>optionsSupported);
@@ -31673,12 +31682,12 @@ try {
 }
 exports.default = addEventListener;
 
-},{"./canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4KYBx":[function(require,module,exports,__globalThis) {
+},{"./canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4KYBx":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"iZl0A":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"iZl0A":[function(require,module,exports,__globalThis) {
 /**
  * A `removeEventListener` ponyfill
  * 
@@ -31695,7 +31704,7 @@ function removeEventListener(node, eventName, handler, options) {
 }
 exports.default = removeEventListener;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"303IT":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"303IT":[function(require,module,exports,__globalThis) {
 /**
  * Triggers an event on a given element.
  * 
@@ -31716,7 +31725,7 @@ function triggerEvent(node, eventName, bubbles, cancelable) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"dWP0P":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dWP0P":[function(require,module,exports,__globalThis) {
 // reading a dimension prop will cause the browser to recalculate,
 // which will let our animations work
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -31727,7 +31736,7 @@ function triggerBrowserReflow(node) {
     node.offsetHeight;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bGHRH":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bGHRH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -31794,7 +31803,7 @@ const TransitionWrapper = /*#__PURE__*/ (0, _reactDefault.default).forwardRef(({
 TransitionWrapper.displayName = 'TransitionWrapper';
 exports.default = TransitionWrapper;
 
-},{"react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/hooks/useMergedRefs":"jojtD","./safeFindDOMNode":"9XLXL","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"jojtD":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/hooks/useMergedRefs":"jojtD","./safeFindDOMNode":"9XLXL","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jojtD":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "mergeRefs", ()=>mergeRefs);
@@ -31833,7 +31842,7 @@ function mergeRefs(refA, refB) {
 }
 exports.default = useMergedRefs;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9XLXL":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9XLXL":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>safeFindDOMNode);
@@ -31846,7 +31855,7 @@ function safeFindDOMNode(componentOrElement) {
     return componentOrElement != null ? componentOrElement : null;
 }
 
-},{"react-dom":"i4X7T","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4dv1h":[function(require,module,exports,__globalThis) {
+},{"react-dom":"i4X7T","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4dv1h":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _propTypes = require("prop-types");
@@ -31877,7 +31886,7 @@ CloseButton.displayName = 'CloseButton';
 CloseButton.propTypes = propTypes;
 exports.default = CloseButton;
 
-},{"prop-types":"GNqOQ","react":"jMk1U","classnames":"Egwmr","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kNKIo":[function(require,module,exports,__globalThis) {
+},{"prop-types":"GNqOQ","react":"jMk1U","classnames":"Egwmr","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kNKIo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -31906,7 +31915,7 @@ const Button = /*#__PURE__*/ _react.forwardRef(({ as, bsPrefix, variant = 'prima
 Button.displayName = 'Button';
 exports.default = Button;
 
-},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/Button":"cxoj5","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"56ajS":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/Button":"cxoj5","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"56ajS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -31958,7 +31967,7 @@ exports.default = Object.assign(Card, {
     ImgOverlay: (0, _cardImgOverlayDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./CardBody":"7Ivmj","./CardFooter":"i937s","./CardHeader":"4LG8q","./CardImg":"9sZbN","./CardImgOverlay":"gETRN","./CardLink":"ffUGV","./CardSubtitle":"8M9vk","./CardText":"ipPfo","./CardTitle":"cQy33","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7Ivmj":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./CardBody":"7Ivmj","./CardFooter":"i937s","./CardHeader":"4LG8q","./CardImg":"9sZbN","./CardImgOverlay":"gETRN","./CardLink":"ffUGV","./CardSubtitle":"8M9vk","./CardText":"ipPfo","./CardTitle":"cQy33","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7Ivmj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -31978,7 +31987,7 @@ const CardBody = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Com
 CardBody.displayName = 'CardBody';
 exports.default = CardBody;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"i937s":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"i937s":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -31998,7 +32007,7 @@ const CardFooter = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: C
 CardFooter.displayName = 'CardFooter';
 exports.default = CardFooter;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4LG8q":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4LG8q":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32029,7 +32038,7 @@ as: Component = 'div', ...props }, ref)=>{
 CardHeader.displayName = 'CardHeader';
 exports.default = CardHeader;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./CardHeaderContext":"9gqCk","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9gqCk":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./CardHeaderContext":"9gqCk","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9gqCk":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32038,7 +32047,7 @@ const context = /*#__PURE__*/ _react.createContext(null);
 context.displayName = 'CardHeaderContext';
 exports.default = context;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9sZbN":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9sZbN":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32059,7 +32068,7 @@ const CardImg = /*#__PURE__*/ _react.forwardRef(// Need to define the default "a
 CardImg.displayName = 'CardImg';
 exports.default = CardImg;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gETRN":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gETRN":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32079,7 +32088,7 @@ const CardImgOverlay = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, a
 CardImgOverlay.displayName = 'CardImgOverlay';
 exports.default = CardImgOverlay;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ffUGV":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ffUGV":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32099,7 +32108,7 @@ const CardLink = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Com
 CardLink.displayName = 'CardLink';
 exports.default = CardLink;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"8M9vk":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8M9vk":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32122,7 +32131,7 @@ const CardSubtitle = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as:
 CardSubtitle.displayName = 'CardSubtitle';
 exports.default = CardSubtitle;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ipPfo":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ipPfo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32142,7 +32151,7 @@ const CardText = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Com
 CardText.displayName = 'CardText';
 exports.default = CardText;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cQy33":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cQy33":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32165,7 +32174,7 @@ const CardTitle = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Co
 CardTitle.displayName = 'CardTitle';
 exports.default = CardTitle;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"6x0qd":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","./divWithClassName":"7NpDo","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6x0qd":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useCol", ()=>useCol);
@@ -32218,7 +32227,7 @@ const Col = /*#__PURE__*/ _react.forwardRef(// Need to define the default "as" d
 Col.displayName = 'Col';
 exports.default = Col;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9jq50":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9jq50":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32322,7 +32331,7 @@ const Collapse = /*#__PURE__*/ (0, _reactDefault.default).forwardRef(({ onEnter,
 Collapse.displayName = 'Collapse';
 exports.default = Collapse;
 
-},{"classnames":"Egwmr","dom-helpers/css":"7SRnC","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./createChainedFunction":"k1mJI","./triggerBrowserReflow":"dWP0P","./TransitionWrapper":"bGHRH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"k1mJI":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","dom-helpers/css":"7SRnC","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./createChainedFunction":"k1mJI","./triggerBrowserReflow":"dWP0P","./TransitionWrapper":"bGHRH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k1mJI":[function(require,module,exports,__globalThis) {
 /**
  * Safe chained function
  *
@@ -32347,7 +32356,7 @@ function createChainedFunction(...funcs) {
 }
 exports.default = createChainedFunction;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2GCvr":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2GCvr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32369,7 +32378,7 @@ as: Component = 'div', className, ...props }, ref)=>{
 Container.displayName = 'Container';
 exports.default = Container;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"6LPqw":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6LPqw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32434,7 +32443,7 @@ exports.default = Object.assign(Form, {
     FloatingLabel: (0, _floatingLabelDefault.default)
 });
 
-},{"classnames":"Egwmr","prop-types":"GNqOQ","react":"jMk1U","./FormCheck":"3ZlEt","./FormControl":"3wD2h","./FormFloating":"8LJY2","./FormGroup":"8rawe","./FormLabel":"1CZ4H","./FormRange":"diyIw","./FormSelect":"iKjWR","./FormText":"fSwH0","./Switch":"9opjn","./FloatingLabel":"aDGZn","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"3ZlEt":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","prop-types":"GNqOQ","react":"jMk1U","./FormCheck":"3ZlEt","./FormControl":"3wD2h","./FormFloating":"8LJY2","./FormGroup":"8rawe","./FormLabel":"1CZ4H","./FormRange":"diyIw","./FormSelect":"iKjWR","./FormText":"fSwH0","./Switch":"9opjn","./FloatingLabel":"aDGZn","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3ZlEt":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32501,7 +32510,7 @@ exports.default = Object.assign(FormCheck, {
     Label: (0, _formCheckLabelDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","./Feedback":"bLUId","./FormCheckInput":"lw2Mm","./FormCheckLabel":"bompA","./FormContext":"7rs9m","./ThemeProvider":"gulxC","./ElementChildren":"iG925","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bLUId":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./Feedback":"bLUId","./FormCheckInput":"lw2Mm","./FormCheckLabel":"bompA","./FormContext":"7rs9m","./ThemeProvider":"gulxC","./ElementChildren":"iG925","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bLUId":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32529,7 +32538,7 @@ Feedback.displayName = 'Feedback';
 Feedback.propTypes = propTypes;
 exports.default = Feedback;
 
-},{"classnames":"Egwmr","react":"jMk1U","prop-types":"GNqOQ","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"lw2Mm":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","prop-types":"GNqOQ","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lw2Mm":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32555,7 +32564,7 @@ as: Component = 'input', ...props }, ref)=>{
 FormCheckInput.displayName = 'FormCheckInput';
 exports.default = FormCheckInput;
 
-},{"classnames":"Egwmr","react":"jMk1U","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7rs9m":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7rs9m":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32564,7 +32573,7 @@ var _react = require("react");
 const FormContext = /*#__PURE__*/ _react.createContext({});
 exports.default = FormContext;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bompA":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bompA":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32588,7 +32597,7 @@ const FormCheckLabel = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, h
 FormCheckLabel.displayName = 'FormCheckLabel';
 exports.default = FormCheckLabel;
 
-},{"classnames":"Egwmr","react":"jMk1U","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"iG925":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"iG925":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "map", ()=>map);
@@ -32624,7 +32633,7 @@ var _react = require("react");
     return _react.Children.toArray(children).some((child)=>/*#__PURE__*/ _react.isValidElement(child) && child.type === type);
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"3wD2h":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3wD2h":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32659,7 +32668,7 @@ exports.default = Object.assign(FormControl, {
     Feedback: (0, _feedbackDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","./Feedback":"bLUId","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"k76Xo":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","./Feedback":"bLUId","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k76Xo":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -32722,7 +32731,7 @@ const FormFloating = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as:
 FormFloating.displayName = 'FormFloating';
 exports.default = FormFloating;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"8rawe":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8rawe":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32747,7 +32756,7 @@ as: Component = 'div', ...props }, ref)=>{
 FormGroup.displayName = 'FormGroup';
 exports.default = FormGroup;
 
-},{"react":"jMk1U","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"1CZ4H":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1CZ4H":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32788,7 +32797,7 @@ as: Component = 'label', bsPrefix, column = false, visuallyHidden = false, class
 FormLabel.displayName = 'FormLabel';
 exports.default = FormLabel;
 
-},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","./Col":"6x0qd","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"diyIw":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","./Col":"6x0qd","./FormContext":"7rs9m","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"diyIw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32813,7 +32822,7 @@ const FormRange = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, id, ..
 FormRange.displayName = 'FormRange';
 exports.default = FormRange;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"iKjWR":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"iKjWR":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32838,7 +32847,7 @@ const FormSelect = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, size, htmlSize, 
 FormSelect.displayName = 'FormSelect';
 exports.default = FormSelect;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"fSwH0":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./FormContext":"7rs9m","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fSwH0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32859,7 +32868,7 @@ const FormText = /*#__PURE__*/ _react.forwardRef(// Need to define the default "
 FormText.displayName = 'FormText';
 exports.default = FormText;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9opjn":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9opjn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -32877,7 +32886,7 @@ exports.default = Object.assign(Switch, {
     Label: (0, _formCheckDefault.default).Label
 });
 
-},{"react":"jMk1U","./FormCheck":"3ZlEt","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"aDGZn":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./FormCheck":"3ZlEt","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aDGZn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32907,7 +32916,7 @@ const FloatingLabel = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, ch
 FloatingLabel.displayName = 'FloatingLabel';
 exports.default = FloatingLabel;
 
-},{"classnames":"Egwmr","react":"jMk1U","./FormGroup":"8rawe","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"av3gS":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./FormGroup":"8rawe","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"av3gS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -32944,7 +32953,7 @@ exports.default = Object.assign(ListGroup, {
     Item: (0, _listGroupItemDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","uncontrollable":"eKG0k","@restart/ui/Nav":"dPzuz","./ThemeProvider":"gulxC","./ListGroupItem":"bZFjg","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"dPzuz":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","uncontrollable":"eKG0k","@restart/ui/Nav":"dPzuz","./ThemeProvider":"gulxC","./ListGroupItem":"bZFjg","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dPzuz":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _querySelectorAll = require("dom-helpers/querySelectorAll");
@@ -33072,7 +33081,7 @@ exports.default = Object.assign(Nav, {
     Item: (0, _navItemDefault.default)
 });
 
-},{"dom-helpers/querySelectorAll":"5zxKA","react":"jMk1U","@restart/hooks/useForceUpdate":"3qfTy","@restart/hooks/useMergedRefs":"cRxiR","./NavContext":"eh6HT","./SelectableContext":"HZlMW","./TabContext":"iSI1d","./DataKey":"bTMsz","./NavItem":"YepwW","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5zxKA":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/querySelectorAll":"5zxKA","react":"jMk1U","@restart/hooks/useForceUpdate":"3qfTy","@restart/hooks/useMergedRefs":"cRxiR","./NavContext":"eh6HT","./SelectableContext":"HZlMW","./TabContext":"iSI1d","./DataKey":"bTMsz","./NavItem":"YepwW","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5zxKA":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>qsa);
@@ -33081,7 +33090,7 @@ function qsa(element, selector) {
     return toArray(element.querySelectorAll(selector));
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"3qfTy":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3qfTy":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useForceUpdate);
@@ -33093,7 +33102,7 @@ function useForceUpdate() {
     return dispatch;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cRxiR":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cRxiR":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "mergeRefs", ()=>mergeRefs);
@@ -33132,7 +33141,7 @@ function mergeRefs(refA, refB) {
 }
 exports.default = useMergedRefs;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"eh6HT":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"eh6HT":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -33140,7 +33149,7 @@ const NavContext = /*#__PURE__*/ _react.createContext(null);
 NavContext.displayName = 'NavContext';
 exports.default = NavContext;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"HZlMW":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"HZlMW":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "makeEventKey", ()=>makeEventKey);
@@ -33152,14 +33161,14 @@ const makeEventKey = (eventKey, href = null)=>{
 };
 exports.default = SelectableContext;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"iSI1d":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"iSI1d":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
 const TabContext = /*#__PURE__*/ _react.createContext(null);
 exports.default = TabContext;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bTMsz":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bTMsz":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ATTRIBUTE_PREFIX", ()=>ATTRIBUTE_PREFIX);
@@ -33175,7 +33184,7 @@ function dataProp(property) {
     return `${PROPERTY_PREFIX}${property}`;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"YepwW":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YepwW":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useNavItem", ()=>useNavItem);
@@ -33268,7 +33277,7 @@ const NavItem = /*#__PURE__*/ _react.forwardRef((_ref, ref)=>{
 NavItem.displayName = 'NavItem';
 exports.default = NavItem;
 
-},{"react":"jMk1U","@restart/hooks/useEventCallback":"8ZwAX","./NavContext":"eh6HT","./SelectableContext":"HZlMW","./Button":"cxoj5","./DataKey":"bTMsz","./TabContext":"iSI1d","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bZFjg":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@restart/hooks/useEventCallback":"8ZwAX","./NavContext":"eh6HT","./SelectableContext":"HZlMW","./Button":"cxoj5","./DataKey":"bTMsz","./TabContext":"iSI1d","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bZFjg":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -33315,7 +33324,7 @@ const ListGroupItem = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, active, disab
 ListGroupItem.displayName = 'ListGroupItem';
 exports.default = ListGroupItem;
 
-},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","@restart/hooks/useEventCallback":"2uLwi","@restart/ui/NavItem":"YepwW","@restart/ui/SelectableContext":"HZlMW","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"dj8kw":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","warning":"k76Xo","@restart/hooks/useEventCallback":"2uLwi","@restart/ui/NavItem":"YepwW","@restart/ui/SelectableContext":"HZlMW","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dj8kw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -33545,7 +33554,7 @@ exports.default = Object.assign(Modal, {
     BACKDROP_TRANSITION_DURATION: 150
 });
 
-},{"classnames":"Egwmr","dom-helpers/addEventListener":"btM1W","dom-helpers/canUseDOM":"4KYBx","dom-helpers/ownerDocument":"isOL7","dom-helpers/removeEventListener":"iZl0A","dom-helpers/scrollbarSize":"kqqPe","@restart/hooks/useCallbackRef":"k6f5l","@restart/hooks/useEventCallback":"2uLwi","@restart/hooks/useMergedRefs":"jojtD","@restart/hooks/useWillUnmount":"WJkBK","dom-helpers/transitionEnd":"5CVci","react":"jMk1U","@restart/ui/Modal":"f80sk","./BootstrapModalManager":"fkD02","./Fade":"kNoMh","./ModalBody":"41WTP","./ModalContext":"4BNBH","./ModalDialog":"kTPSa","./ModalFooter":"56jld","./ModalHeader":"a71mO","./ModalTitle":"41L2a","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kqqPe":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","dom-helpers/addEventListener":"btM1W","dom-helpers/canUseDOM":"4KYBx","dom-helpers/ownerDocument":"isOL7","dom-helpers/removeEventListener":"iZl0A","dom-helpers/scrollbarSize":"kqqPe","@restart/hooks/useCallbackRef":"k6f5l","@restart/hooks/useEventCallback":"2uLwi","@restart/hooks/useMergedRefs":"jojtD","@restart/hooks/useWillUnmount":"WJkBK","dom-helpers/transitionEnd":"5CVci","react":"jMk1U","@restart/ui/Modal":"f80sk","./BootstrapModalManager":"fkD02","./Fade":"kNoMh","./ModalBody":"41WTP","./ModalContext":"4BNBH","./ModalDialog":"kTPSa","./ModalFooter":"56jld","./ModalHeader":"a71mO","./ModalTitle":"41L2a","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kqqPe":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>scrollbarSize);
@@ -33569,7 +33578,7 @@ function scrollbarSize(recalc) {
     return size;
 }
 
-},{"./canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"k6f5l":[function(require,module,exports,__globalThis) {
+},{"./canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k6f5l":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useCallbackRef);
@@ -33578,7 +33587,7 @@ function useCallbackRef() {
     return (0, _react.useState)(null);
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"WJkBK":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"WJkBK":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useWillUnmount);
@@ -33590,7 +33599,7 @@ function useWillUnmount(fn) {
     (0, _react.useEffect)(()=>()=>onUnmount.current(), []);
 }
 
-},{"./useUpdatedRef":"aAS1r","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"aAS1r":[function(require,module,exports,__globalThis) {
+},{"./useUpdatedRef":"aAS1r","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aAS1r":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useUpdatedRef);
@@ -33601,7 +33610,7 @@ function useUpdatedRef(value) {
     return valueRef;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"f80sk":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f80sk":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 /* eslint-disable @typescript-eslint/no-use-before-define, react/prop-types */ var _activeElement = require("dom-helpers/activeElement");
@@ -33849,7 +33858,7 @@ exports.default = Object.assign(Modal, {
     Manager: (0, _modalManagerDefault.default)
 });
 
-},{"dom-helpers/activeElement":"1cZGi","dom-helpers/contains":"7bB4g","dom-helpers/canUseDOM":"4KYBx","dom-helpers/listen":"kIFKz","react":"jMk1U","react-dom":"i4X7T","@restart/hooks/useMounted":"gvzMX","@restart/hooks/useWillUnmount":"ljKYb","@restart/hooks/usePrevious":"6qj9r","@restart/hooks/useEventCallback":"8ZwAX","./ModalManager":"jAXnV","./useWaitForDOMRef":"hstLK","./useWindow":"9Q4WK","./ImperativeTransition":"bumCS","./utils":"9WvAD","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"1cZGi":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/activeElement":"1cZGi","dom-helpers/contains":"7bB4g","dom-helpers/canUseDOM":"4KYBx","dom-helpers/listen":"kIFKz","react":"jMk1U","react-dom":"i4X7T","@restart/hooks/useMounted":"gvzMX","@restart/hooks/useWillUnmount":"ljKYb","@restart/hooks/usePrevious":"6qj9r","@restart/hooks/useEventCallback":"8ZwAX","./ModalManager":"jAXnV","./useWaitForDOMRef":"hstLK","./useWindow":"9Q4WK","./ImperativeTransition":"bumCS","./utils":"9WvAD","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1cZGi":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>activeElement);
@@ -33869,7 +33878,7 @@ function activeElement(doc) {
     }
 }
 
-},{"./ownerDocument":"isOL7","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7bB4g":[function(require,module,exports,__globalThis) {
+},{"./ownerDocument":"isOL7","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7bB4g":[function(require,module,exports,__globalThis) {
 /* eslint-disable no-bitwise, no-cond-assign */ /**
  * Checks if an element contains another given element.
  * 
@@ -33885,7 +33894,7 @@ function contains(context, node) {
     if (context.compareDocumentPosition) return context === node || !!(context.compareDocumentPosition(node) & 16);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ljKYb":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ljKYb":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useWillUnmount);
@@ -33897,7 +33906,7 @@ function useWillUnmount(fn) {
     (0, _react.useEffect)(()=>()=>onUnmount.current(), []);
 }
 
-},{"./useUpdatedRef":"9og4I","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9og4I":[function(require,module,exports,__globalThis) {
+},{"./useUpdatedRef":"9og4I","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9og4I":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useUpdatedRef);
@@ -33908,7 +33917,7 @@ function useUpdatedRef(value) {
     return valueRef;
 }
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"jAXnV":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jAXnV":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "OPEN_DATA_ATTRIBUTE", ()=>OPEN_DATA_ATTRIBUTE);
@@ -33997,7 +34006,7 @@ const OPEN_DATA_ATTRIBUTE = (0, _dataKey.dataAttr)('modal-open');
 }
 exports.default = ModalManager;
 
-},{"dom-helpers/css":"7SRnC","./DataKey":"bTMsz","./getScrollbarWidth":"gSXx2","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gSXx2":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/css":"7SRnC","./DataKey":"bTMsz","./getScrollbarWidth":"gSXx2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gSXx2":[function(require,module,exports,__globalThis) {
 /**
  * Get the width of the vertical window scrollbar if it's visible
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -34008,7 +34017,7 @@ function getBodyScrollbarWidth(ownerDocument = document) {
     return Math.abs(window.innerWidth - ownerDocument.documentElement.clientWidth);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"hstLK":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hstLK":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "resolveContainerRef", ()=>resolveContainerRef);
@@ -34051,7 +34060,7 @@ function useWaitForDOMRef(ref, onResolved) {
     return resolvedRef;
 }
 
-},{"dom-helpers/ownerDocument":"isOL7","dom-helpers/canUseDOM":"4KYBx","react":"jMk1U","./useWindow":"9Q4WK","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9Q4WK":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/ownerDocument":"isOL7","dom-helpers/canUseDOM":"4KYBx","react":"jMk1U","./useWindow":"9Q4WK","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9Q4WK":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "WindowProvider", ()=>WindowProvider);
@@ -34065,7 +34074,7 @@ function useWindow() {
     return (0, _react.useContext)(Context);
 }
 
-},{"react":"jMk1U","dom-helpers/canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bumCS":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","dom-helpers/canUseDOM":"4KYBx","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bumCS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useTransition", ()=>useTransition);
@@ -34150,7 +34159,7 @@ function renderTransition(component, runTransition, props) {
     return /*#__PURE__*/ (0, _jsxRuntime.jsx)((0, _noopTransitionDefault.default), Object.assign({}, props));
 }
 
-},{"@restart/hooks/useMergedRefs":"cRxiR","@restart/hooks/useEventCallback":"8ZwAX","@restart/hooks/useIsomorphicEffect":"2D2VF","react":"jMk1U","./NoopTransition":"7LgCB","./RTGTransition":"5LS7b","./utils":"9WvAD","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7LgCB":[function(require,module,exports,__globalThis) {
+},{"@restart/hooks/useMergedRefs":"cRxiR","@restart/hooks/useEventCallback":"8ZwAX","@restart/hooks/useIsomorphicEffect":"2D2VF","react":"jMk1U","./NoopTransition":"7LgCB","./RTGTransition":"5LS7b","./utils":"9WvAD","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7LgCB":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _useEventCallback = require("@restart/hooks/useEventCallback");
@@ -34181,7 +34190,7 @@ function NoopTransition({ children, in: inProp, onExited, mountOnEnter, unmountO
 }
 exports.default = NoopTransition;
 
-},{"@restart/hooks/useEventCallback":"8ZwAX","@restart/hooks/useMergedRefs":"cRxiR","react":"jMk1U","./utils":"9WvAD","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"5LS7b":[function(require,module,exports,__globalThis) {
+},{"@restart/hooks/useEventCallback":"8ZwAX","@restart/hooks/useMergedRefs":"cRxiR","react":"jMk1U","./utils":"9WvAD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"5LS7b":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34210,7 +34219,7 @@ const RTGTransition = /*#__PURE__*/ _react.forwardRef((_ref, ref)=>{
 });
 exports.default = RTGTransition;
 
-},{"react":"jMk1U","./useRTGTransitionProps":"k884A","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"k884A":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./useRTGTransitionProps":"k884A","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k884A":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useRTGTransitionProps);
@@ -34291,7 +34300,7 @@ function useRTGTransitionProps(_ref) {
     });
 }
 
-},{"react":"jMk1U","@restart/hooks/useMergedRefs":"cRxiR","./utils":"9WvAD","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"fkD02":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@restart/hooks/useMergedRefs":"cRxiR","./utils":"9WvAD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fkD02":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getSharedManager", ()=>getSharedManager);
@@ -34357,7 +34366,7 @@ function getSharedManager(options) {
 }
 exports.default = BootstrapModalManager;
 
-},{"dom-helpers/addClass":"bA1Q4","dom-helpers/css":"7SRnC","dom-helpers/querySelectorAll":"5zxKA","dom-helpers/removeClass":"lnzZZ","@restart/ui/ModalManager":"jAXnV","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"bA1Q4":[function(require,module,exports,__globalThis) {
+},{"dom-helpers/addClass":"bA1Q4","dom-helpers/css":"7SRnC","dom-helpers/querySelectorAll":"5zxKA","dom-helpers/removeClass":"lnzZZ","@restart/ui/ModalManager":"jAXnV","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bA1Q4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>addClass);
@@ -34371,7 +34380,7 @@ function addClass(element, className) {
     }
 }
 
-},{"./hasClass":"aIL32","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"aIL32":[function(require,module,exports,__globalThis) {
+},{"./hasClass":"aIL32","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aIL32":[function(require,module,exports,__globalThis) {
 /**
  * Checks if a given element has a CSS class.
  * 
@@ -34385,7 +34394,7 @@ function hasClass(element, className) {
     return (" " + (element.className.baseVal || element.className) + " ").indexOf(" " + className + " ") !== -1;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"lnzZZ":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lnzZZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>removeClass);
@@ -34398,7 +34407,7 @@ function removeClass(element, className) {
     else element.setAttribute('class', replaceClassName(element.className && element.className.baseVal || '', className));
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"41WTP":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"41WTP":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34418,7 +34427,7 @@ const ModalBody = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Co
 ModalBody.displayName = 'ModalBody';
 exports.default = ModalBody;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4BNBH":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4BNBH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34428,7 +34437,7 @@ const ModalContext = /*#__PURE__*/ _react.createContext({
 });
 exports.default = ModalContext;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kTPSa":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kTPSa":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34454,7 +34463,7 @@ const ModalDialog = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, cont
 ModalDialog.displayName = 'ModalDialog';
 exports.default = ModalDialog;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"56jld":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"56jld":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34474,7 +34483,7 @@ const ModalFooter = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: 
 ModalFooter.displayName = 'ModalFooter';
 exports.default = ModalFooter;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"a71mO":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"a71mO":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34498,7 +34507,7 @@ const ModalHeader = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, clos
 ModalHeader.displayName = 'ModalHeader';
 exports.default = ModalHeader;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./AbstractModalHeader":"kZdqe","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kZdqe":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./AbstractModalHeader":"kZdqe","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kZdqe":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34532,7 +34541,7 @@ const AbstractModalHeader = /*#__PURE__*/ _react.forwardRef(({ closeLabel = 'Clo
 AbstractModalHeader.displayName = 'AbstractModalHeader';
 exports.default = AbstractModalHeader;
 
-},{"react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./CloseButton":"4dv1h","./ModalContext":"4BNBH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"41L2a":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./CloseButton":"4dv1h","./ModalContext":"4BNBH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"41L2a":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34555,7 +34564,7 @@ const ModalTitle = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: C
 ModalTitle.displayName = 'ModalTitle';
 exports.default = ModalTitle;
 
-},{"react":"jMk1U","classnames":"Egwmr","./divWithClassName":"7NpDo","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"8jrcb":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./divWithClassName":"7NpDo","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8jrcb":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34611,7 +34620,7 @@ exports.default = Object.assign(Nav, {
     Link: (0, _navLinkDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","uncontrollable":"eKG0k","@restart/ui/Nav":"dPzuz","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","./CardHeaderContext":"9gqCk","./NavItem":"cDuvI","./NavLink":"7Bpoc","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"3NwrH":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","uncontrollable":"eKG0k","@restart/ui/Nav":"dPzuz","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","./CardHeaderContext":"9gqCk","./NavItem":"cDuvI","./NavLink":"7Bpoc","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3NwrH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34621,7 +34630,7 @@ const context = /*#__PURE__*/ _react.createContext(null);
 context.displayName = 'NavbarContext';
 exports.default = context;
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"cDuvI":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cDuvI":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34641,7 +34650,7 @@ const NavItem = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: Comp
 NavItem.displayName = 'NavItem';
 exports.default = NavItem;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"7Bpoc":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7Bpoc":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34673,7 +34682,7 @@ const NavLink = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, as: Comp
 NavLink.displayName = 'NavLink';
 exports.default = NavLink;
 
-},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/Anchor":"izuD6","@restart/ui/NavItem":"YepwW","@restart/ui/SelectableContext":"HZlMW","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2Lmwo":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/Anchor":"izuD6","@restart/ui/NavItem":"YepwW","@restart/ui/SelectableContext":"HZlMW","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2Lmwo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34750,7 +34759,7 @@ exports.default = Object.assign(Navbar, {
     Toggle: (0, _navbarToggleDefault.default)
 });
 
-},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/SelectableContext":"HZlMW","uncontrollable":"eKG0k","./NavbarBrand":"9BslA","./NavbarCollapse":"4YpeW","./NavbarToggle":"lDrGw","./NavbarOffcanvas":"kZyIo","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","./NavbarText":"4Cm8W","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"9BslA":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","@restart/ui/SelectableContext":"HZlMW","uncontrollable":"eKG0k","./NavbarBrand":"9BslA","./NavbarCollapse":"4YpeW","./NavbarToggle":"lDrGw","./NavbarOffcanvas":"kZyIo","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","./NavbarText":"4Cm8W","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"9BslA":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34771,7 +34780,7 @@ const NavbarBrand = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, as, 
 NavbarBrand.displayName = 'NavbarBrand';
 exports.default = NavbarBrand;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4YpeW":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4YpeW":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34798,7 +34807,7 @@ const NavbarCollapse = /*#__PURE__*/ _react.forwardRef(({ children, bsPrefix, ..
 NavbarCollapse.displayName = 'NavbarCollapse';
 exports.default = NavbarCollapse;
 
-},{"react":"jMk1U","./Collapse":"9jq50","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"lDrGw":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","./Collapse":"9jq50","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lDrGw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34834,7 +34843,7 @@ as: Component = 'button', onClick, ...props }, ref)=>{
 NavbarToggle.displayName = 'NavbarToggle';
 exports.default = NavbarToggle;
 
-},{"classnames":"Egwmr","react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"kZyIo":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./ThemeProvider":"gulxC","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kZyIo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -34863,7 +34872,7 @@ const NavbarOffcanvas = /*#__PURE__*/ _react.forwardRef(({ onHide, ...props }, r
 NavbarOffcanvas.displayName = 'NavbarOffcanvas';
 exports.default = NavbarOffcanvas;
 
-},{"react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./Offcanvas":"hb6XP","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"hb6XP":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@restart/hooks/useEventCallback":"2uLwi","./Offcanvas":"hb6XP","./NavbarContext":"3NwrH","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hb6XP":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -34997,7 +35006,7 @@ exports.default = Object.assign(Offcanvas, {
     Title: (0, _offcanvasTitleDefault.default)
 });
 
-},{"classnames":"Egwmr","@restart/hooks/useBreakpoint":"BVjZe","@restart/hooks/useEventCallback":"2uLwi","react":"jMk1U","@restart/ui/Modal":"f80sk","./Fade":"kNoMh","./OffcanvasBody":"dKReK","./OffcanvasToggling":"k1qb0","./ModalContext":"4BNBH","./OffcanvasHeader":"23JdJ","./OffcanvasTitle":"h3Ihi","./ThemeProvider":"gulxC","./BootstrapModalManager":"fkD02","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"BVjZe":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","@restart/hooks/useBreakpoint":"BVjZe","@restart/hooks/useEventCallback":"2uLwi","react":"jMk1U","@restart/ui/Modal":"f80sk","./Fade":"kNoMh","./OffcanvasBody":"dKReK","./OffcanvasToggling":"k1qb0","./ModalContext":"4BNBH","./OffcanvasHeader":"23JdJ","./OffcanvasTitle":"h3Ihi","./ThemeProvider":"gulxC","./BootstrapModalManager":"fkD02","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"BVjZe":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 /**
@@ -35108,7 +35117,7 @@ const useBreakpoint = createBreakpointHook({
 });
 exports.default = useBreakpoint;
 
-},{"./useMediaQuery":"gXRg8","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"gXRg8":[function(require,module,exports,__globalThis) {
+},{"./useMediaQuery":"gXRg8","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gXRg8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>useMediaQuery);
@@ -35153,7 +35162,7 @@ function useMediaQuery(query, targetWindow = typeof window === 'undefined' ? und
     return matches;
 }
 
-},{"./useIsomorphicEffect":"63utT","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"63utT":[function(require,module,exports,__globalThis) {
+},{"./useIsomorphicEffect":"63utT","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"63utT":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -35171,7 +35180,7 @@ const isDOM = typeof document !== 'undefined';
  * @category effects
  */ exports.default = isDOM || isReactNative ? (0, _react.useLayoutEffect) : (0, _react.useEffect);
 
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"dKReK":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dKReK":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -35191,7 +35200,7 @@ const OffcanvasBody = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as
 OffcanvasBody.displayName = 'OffcanvasBody';
 exports.default = OffcanvasBody;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"k1qb0":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k1qb0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -35230,7 +35239,7 @@ const OffcanvasToggling = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className
 OffcanvasToggling.displayName = 'OffcanvasToggling';
 exports.default = OffcanvasToggling;
 
-},{"classnames":"Egwmr","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./TransitionWrapper":"bGHRH","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"23JdJ":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","react-transition-group/Transition":"hAmWn","@restart/ui/utils":"9WvAD","./transitionEndListener":"emmfn","./TransitionWrapper":"bGHRH","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"23JdJ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -35254,7 +35263,7 @@ const OffcanvasHeader = /*#__PURE__*/ _react.forwardRef(({ bsPrefix, className, 
 OffcanvasHeader.displayName = 'OffcanvasHeader';
 exports.default = OffcanvasHeader;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./AbstractModalHeader":"kZdqe","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"h3Ihi":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","./AbstractModalHeader":"kZdqe","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"h3Ihi":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -35277,7 +35286,7 @@ const OffcanvasTitle = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, a
 OffcanvasTitle.displayName = 'OffcanvasTitle';
 exports.default = OffcanvasTitle;
 
-},{"react":"jMk1U","classnames":"Egwmr","./divWithClassName":"7NpDo","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4Cm8W":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./divWithClassName":"7NpDo","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4Cm8W":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
@@ -35297,7 +35306,7 @@ const NavbarText = /*#__PURE__*/ _react.forwardRef(({ className, bsPrefix, as: C
 NavbarText.displayName = 'NavbarText';
 exports.default = NavbarText;
 
-},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2DPD4":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","classnames":"Egwmr","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2DPD4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -35331,7 +35340,7 @@ as: Component = 'div', ...props }, ref)=>{
 Row.displayName = 'Row';
 exports.default = Row;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4p9zi":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4p9zi":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _classnames = require("classnames");
@@ -35353,7 +35362,7 @@ as: Component = 'div', className, ...props }, ref)=>{
 Spinner.displayName = 'Spinner';
 exports.default = Spinner;
 
-},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"ea711":[function(require,module,exports,__globalThis) {
+},{"classnames":"Egwmr","react":"jMk1U","./ThemeProvider":"gulxC","react/jsx-runtime":"05iiF","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"ea711":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$2f7b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$2f7b.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -35361,7 +35370,6 @@ var prevRefreshSig = globalThis.$RefreshSig$;
 $parcel$ReactRefreshHelpers$2f7b.prelude(module);
 
 try {
-// movie-modal.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MovieModal", ()=>MovieModal);
@@ -35371,12 +35379,13 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _propTypes = require("prop-types");
 var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 var _reactBootstrap = require("react-bootstrap");
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const MovieModal = ({ movie, user, token, setUser, onClose })=>{
-    const isfavorite = user?.FavoriteMovies?.includes(movie._id);
+    const isFavorite = user?.favoriteMovies?.includes(movie._id);
     const toggleFavorite = ()=>{
         if (!user || !token) return;
-        const method = isfavorite ? "DELETE" : "POST";
-        fetch(`https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}/movies/${movie._id}`, {
+        const method = isFavorite ? "DELETE" : "POST";
+        fetch(`${API_URL}/users/${user.username}/movies/${movie._id}`, {
             method,
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -35399,7 +35408,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
                             md: 5,
                             children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                                src: movie.imageURL,
+                                src: movie.imageURL?.startsWith("http") ? movie.imageURL : `${API_URL}/img/${movie.imageURL}`,
                                 alt: movie.title,
                                 style: {
                                     width: "100%",
@@ -35407,12 +35416,12 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                 }
                             }, void 0, false, {
                                 fileName: "src/components/movie-modal.jsx",
-                                lineNumber: 36,
+                                lineNumber: 31,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/components/movie-modal.jsx",
-                            lineNumber: 35,
+                            lineNumber: 30,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -35422,7 +35431,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     children: movie.title
                                 }, void 0, false, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 43,
+                                    lineNumber: 38,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -35431,7 +35440,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                             children: "Genre:"
                                         }, void 0, false, {
                                             fileName: "src/components/movie-modal.jsx",
-                                            lineNumber: 44,
+                                            lineNumber: 39,
                                             columnNumber: 16
                                         }, undefined),
                                         " ",
@@ -35439,7 +35448,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 44,
+                                    lineNumber: 39,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -35448,7 +35457,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                             children: "Director:"
                                         }, void 0, false, {
                                             fileName: "src/components/movie-modal.jsx",
-                                            lineNumber: 45,
+                                            lineNumber: 40,
                                             columnNumber: 16
                                         }, undefined),
                                         " ",
@@ -35456,7 +35465,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 45,
+                                    lineNumber: 40,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -35465,7 +35474,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                             children: "Year:"
                                         }, void 0, false, {
                                             fileName: "src/components/movie-modal.jsx",
-                                            lineNumber: 46,
+                                            lineNumber: 41,
                                             columnNumber: 16
                                         }, undefined),
                                         " ",
@@ -35473,7 +35482,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 46,
+                                    lineNumber: 41,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -35482,7 +35491,7 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                             children: "Actors:"
                                         }, void 0, false, {
                                             fileName: "src/components/movie-modal.jsx",
-                                            lineNumber: 47,
+                                            lineNumber: 42,
                                             columnNumber: 16
                                         }, undefined),
                                         " ",
@@ -35490,40 +35499,40 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 47,
+                                    lineNumber: 42,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
                                     children: movie.description
                                 }, void 0, false, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 48,
+                                    lineNumber: 43,
                                     columnNumber: 13
                                 }, undefined),
                                 user && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
-                                    variant: isfavorite ? "danger" : "primary",
+                                    variant: isFavorite ? "danger" : "primary",
                                     onClick: toggleFavorite,
-                                    children: isfavorite ? "Remove from Favorites" : "Add to Favorites"
+                                    children: isFavorite ? "Remove from Favorites" : "Add to Favorites"
                                 }, void 0, false, {
                                     fileName: "src/components/movie-modal.jsx",
-                                    lineNumber: 51,
+                                    lineNumber: 46,
                                     columnNumber: 15
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/components/movie-modal.jsx",
-                            lineNumber: 42,
+                            lineNumber: 37,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/components/movie-modal.jsx",
-                    lineNumber: 34,
+                    lineNumber: 29,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/movie-modal.jsx",
-                lineNumber: 33,
+                lineNumber: 28,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Modal).Footer, {
@@ -35533,18 +35542,18 @@ const MovieModal = ({ movie, user, token, setUser, onClose })=>{
                     children: "Close"
                 }, void 0, false, {
                     fileName: "src/components/movie-modal.jsx",
-                    lineNumber: 59,
+                    lineNumber: 54,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/movie-modal.jsx",
-                lineNumber: 58,
+                lineNumber: 53,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/movie-modal.jsx",
-        lineNumber: 32,
+        lineNumber: 27,
         columnNumber: 5
     }, undefined);
 };
@@ -35564,7 +35573,7 @@ $RefreshReg$(_c, "MovieModal");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","react-bootstrap":"ctEhb","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM"}],"5EGNp":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","react-bootstrap":"ctEhb","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"5EGNp":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$7e40 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$7e40.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -35581,6 +35590,7 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _reactRouterDom = require("react-router-dom");
 var _reactBootstrap = require("react-bootstrap");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const MovieView = ()=>{
     _s();
     const location = (0, _reactRouterDom.useLocation)();
@@ -35590,11 +35600,11 @@ const MovieView = ()=>{
         children: "Loading movie..."
     }, void 0, false, {
         fileName: "src/components/movie-view.jsx",
-        lineNumber: 9,
+        lineNumber: 11,
         columnNumber: 22
     }, undefined);
     const { title, description, genre, director, imageURL, year, actors } = movie;
-    const posterUrl = imageURL?.startsWith("http") ? imageURL : `https://movie-api-2025-9f90ce074c45.herokuapp.com/img/${imageURL}`;
+    const posterUrl = imageURL ? imageURL.startsWith("http") ? imageURL : `${API_URL}/img/${imageURL}` : null;
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Container), {
         className: "mt-4",
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
@@ -35603,23 +35613,34 @@ const MovieView = ()=>{
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
                     md: 4,
                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card), {
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Img, {
+                        children: posterUrl ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Img, {
                             variant: "top",
                             src: posterUrl,
                             alt: title
                         }, void 0, false, {
                             fileName: "src/components/movie-view.jsx",
-                            lineNumber: 22,
-                            columnNumber: 13
+                            lineNumber: 27,
+                            columnNumber: 15
+                        }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "d-flex align-items-center justify-content-center bg-secondary text-white",
+                            style: {
+                                height: "400px",
+                                borderRadius: "8px"
+                            },
+                            children: "Image not available"
+                        }, void 0, false, {
+                            fileName: "src/components/movie-view.jsx",
+                            lineNumber: 29,
+                            columnNumber: 15
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/components/movie-view.jsx",
-                        lineNumber: 21,
+                        lineNumber: 25,
                         columnNumber: 11
                     }, undefined)
                 }, void 0, false, {
                     fileName: "src/components/movie-view.jsx",
-                    lineNumber: 20,
+                    lineNumber: 24,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -35637,20 +35658,20 @@ const MovieView = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 28,
+                                        lineNumber: 41,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Text, {
                                         children: description
                                     }, void 0, false, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 31,
+                                        lineNumber: 42,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/movie-view.jsx",
-                                lineNumber: 27,
+                                lineNumber: 40,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.ListGroup), {
@@ -35662,8 +35683,8 @@ const MovieView = ()=>{
                                                 children: "Genre:"
                                             }, void 0, false, {
                                                 fileName: "src/components/movie-view.jsx",
-                                                lineNumber: 36,
-                                                columnNumber: 19
+                                                lineNumber: 45,
+                                                columnNumber: 41
                                             }, undefined),
                                             " ",
                                             genre.name,
@@ -35672,8 +35693,8 @@ const MovieView = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 35,
-                                        columnNumber: 17
+                                        lineNumber: 45,
+                                        columnNumber: 25
                                     }, undefined),
                                     director && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.ListGroup).Item, {
                                         children: [
@@ -35681,8 +35702,8 @@ const MovieView = ()=>{
                                                 children: "Director:"
                                             }, void 0, false, {
                                                 fileName: "src/components/movie-view.jsx",
-                                                lineNumber: 41,
-                                                columnNumber: 19
+                                                lineNumber: 46,
+                                                columnNumber: 44
                                             }, undefined),
                                             " ",
                                             director.name,
@@ -35691,30 +35712,30 @@ const MovieView = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 40,
-                                        columnNumber: 17
+                                        lineNumber: 46,
+                                        columnNumber: 28
                                     }, undefined),
-                                    actors && actors.length > 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.ListGroup).Item, {
+                                    actors?.length > 0 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.ListGroup).Item, {
                                         children: [
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
                                                 children: "Actors:"
                                             }, void 0, false, {
                                                 fileName: "src/components/movie-view.jsx",
-                                                lineNumber: 46,
-                                                columnNumber: 19
+                                                lineNumber: 47,
+                                                columnNumber: 54
                                             }, undefined),
                                             " ",
                                             actors.join(", ")
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 45,
-                                        columnNumber: 17
+                                        lineNumber: 47,
+                                        columnNumber: 38
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/movie-view.jsx",
-                                lineNumber: 33,
+                                lineNumber: 44,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Body, {
@@ -35726,39 +35747,39 @@ const MovieView = ()=>{
                                         children: "Back to Movies"
                                     }, void 0, false, {
                                         fileName: "src/components/movie-view.jsx",
-                                        lineNumber: 52,
-                                        columnNumber: 17
+                                        lineNumber: 50,
+                                        columnNumber: 28
                                     }, undefined)
                                 }, void 0, false, {
                                     fileName: "src/components/movie-view.jsx",
-                                    lineNumber: 51,
+                                    lineNumber: 50,
                                     columnNumber: 15
                                 }, undefined)
                             }, void 0, false, {
                                 fileName: "src/components/movie-view.jsx",
-                                lineNumber: 50,
+                                lineNumber: 49,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/movie-view.jsx",
-                        lineNumber: 26,
+                        lineNumber: 39,
                         columnNumber: 11
                     }, undefined)
                 }, void 0, false, {
                     fileName: "src/components/movie-view.jsx",
-                    lineNumber: 25,
+                    lineNumber: 38,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/components/movie-view.jsx",
-            lineNumber: 19,
+            lineNumber: 23,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/components/movie-view.jsx",
-        lineNumber: 18,
+        lineNumber: 22,
         columnNumber: 5
     }, undefined);
 };
@@ -35776,7 +35797,7 @@ $RefreshReg$(_c, "MovieView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react":"jMk1U","react-router-dom":"61z4w","react-bootstrap":"ctEhb"}],"61z4w":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","react-router-dom":"61z4w","react-bootstrap":"ctEhb"}],"61z4w":[function(require,module,exports,__globalThis) {
 /**
  * React Router DOM v6.30.1
  *
@@ -37228,7 +37249,7 @@ let savedScrollPositions = {};
     return (0, _router.matchPath)(path.pathname, nextPath) != null || (0, _router.matchPath)(path.pathname, currentPath) != null;
 }
 
-},{"react":"jMk1U","react-dom":"i4X7T","react-router":"4ChVy","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"4ChVy":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","react-dom":"i4X7T","react-router":"4ChVy","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4ChVy":[function(require,module,exports,__globalThis) {
 /**
  * React Router v6.30.1
  *
@@ -38531,7 +38552,7 @@ function createMemoryRouter(routes, opts) {
     }).initialize();
 }
 
-},{"react":"jMk1U","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"2GHDR":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2GHDR":[function(require,module,exports,__globalThis) {
 /**
  * @remix-run/router v1.23.0
  *
@@ -43006,7 +43027,7 @@ function persistAppliedTransitions(_window, transitions) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0"}],"6RKLx":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6RKLx":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$1455 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$1455.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -43022,6 +43043,7 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _reactBootstrap = require("react-bootstrap");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
     _s();
     const [username, setUsername] = (0, _react.useState)("");
@@ -43033,7 +43055,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
         event.preventDefault();
         setError("");
         setIsLoading(true);
-        fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/login", {
+        fetch(`${API_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -43084,7 +43106,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                         children: "Login"
                     }, void 0, false, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 58,
+                        lineNumber: 60,
                         columnNumber: 11
                     }, undefined),
                     error && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
@@ -43092,7 +43114,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                         children: error
                     }, void 0, false, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 59,
+                        lineNumber: 61,
                         columnNumber: 21
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form), {
@@ -43106,7 +43128,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                         children: "Username"
                                     }, void 0, false, {
                                         fileName: "src/components/login-view.jsx",
-                                        lineNumber: 63,
+                                        lineNumber: 65,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
@@ -43114,16 +43136,17 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                         value: username,
                                         onChange: (e)=>setUsername(e.target.value),
                                         required: true,
-                                        placeholder: "Enter Username"
+                                        placeholder: "Enter Username",
+                                        autoComplete: "username"
                                     }, void 0, false, {
                                         fileName: "src/components/login-view.jsx",
-                                        lineNumber: 64,
+                                        lineNumber: 66,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/login-view.jsx",
-                                lineNumber: 62,
+                                lineNumber: 64,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
@@ -43134,7 +43157,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                         children: "Password"
                                     }, void 0, false, {
                                         fileName: "src/components/login-view.jsx",
-                                        lineNumber: 74,
+                                        lineNumber: 77,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
@@ -43142,16 +43165,17 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                         value: password,
                                         onChange: (e)=>setPassword(e.target.value),
                                         required: true,
-                                        placeholder: "Enter Password"
+                                        placeholder: "Enter Password",
+                                        autoComplete: "current-password"
                                     }, void 0, false, {
                                         fileName: "src/components/login-view.jsx",
-                                        lineNumber: 75,
+                                        lineNumber: 78,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/components/login-view.jsx",
-                                lineNumber: 73,
+                                lineNumber: 76,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -43169,7 +43193,7 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                             "aria-hidden": "true"
                                         }, void 0, false, {
                                             fileName: "src/components/login-view.jsx",
-                                            lineNumber: 92,
+                                            lineNumber: 96,
                                             columnNumber: 19
                                         }, undefined),
                                         " ",
@@ -43178,13 +43202,13 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                 }, void 0, true) : "Login"
                             }, void 0, false, {
                                 fileName: "src/components/login-view.jsx",
-                                lineNumber: 84,
+                                lineNumber: 88,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 61,
+                        lineNumber: 63,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -43202,34 +43226,34 @@ const LoginView = ({ onLoggedIn, onSwitchToSignup })=>{
                                     children: "Registrati"
                                 }, void 0, false, {
                                     fileName: "src/components/login-view.jsx",
-                                    lineNumber: 110,
+                                    lineNumber: 114,
                                     columnNumber: 15
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/components/login-view.jsx",
-                            lineNumber: 108,
+                            lineNumber: 112,
                             columnNumber: 13
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/components/login-view.jsx",
-                        lineNumber: 107,
+                        lineNumber: 111,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/login-view.jsx",
-                lineNumber: 57,
+                lineNumber: 59,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
             fileName: "src/components/login-view.jsx",
-            lineNumber: 53,
+            lineNumber: 55,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/components/login-view.jsx",
-        lineNumber: 49,
+        lineNumber: 51,
         columnNumber: 5
     }, undefined);
 };
@@ -43243,7 +43267,7 @@ $RefreshReg$(_c, "LoginView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react":"jMk1U","react-bootstrap":"ctEhb"}],"4s1oo":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","react-bootstrap":"ctEhb"}],"4s1oo":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$2e68 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$2e68.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -43259,263 +43283,235 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _reactBootstrap = require("react-bootstrap");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const SignupView = ({ onSignedUp, onSwitchToLogin })=>{
     _s();
     const [username, setUsername] = (0, _react.useState)("");
     const [password, setPassword] = (0, _react.useState)("");
     const [email, setEmail] = (0, _react.useState)("");
     const [birthday, setBirthday] = (0, _react.useState)("");
-    const [error, setError] = (0, _react.useState)("");
-    const [isLoading, setIsLoading] = (0, _react.useState)(false);
-    const [shake, setShake] = (0, _react.useState)(false);
-    const handleSubmit = (event)=>{
-        event.preventDefault();
-        setError("");
-        setIsLoading(true);
-        fetch("https://movie-api-2025-9f90ce074c45.herokuapp.com/users", {
+    const [successMessage, setSuccessMessage] = (0, _react.useState)("");
+    const [errorMessage, setErrorMessage] = (0, _react.useState)("");
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        setSuccessMessage("");
+        setErrorMessage("");
+        const body = {
+            username,
+            password,
+            email,
+            birthday
+        };
+        console.log("Signup body:", body); // log per debug
+        fetch(`${API_URL}/users`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                username,
-                password,
-                email,
-                birthday
-            })
+            body: JSON.stringify(body)
         }).then((res)=>{
-            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+            if (!res.ok) return res.json().then((data)=>{
+                throw new Error(data.message || "Signup failed");
+            });
             return res.json();
-        }).then((data)=>{
-            setIsLoading(false);
-            onSignedUp();
-            onSwitchToLogin();
-        }).catch((e)=>{
-            console.error("Signup error:", e);
-            setError("Something went wrong. Check your data or try again later.");
-            setShake(true);
-            setTimeout(()=>setShake(false), 500);
+        }).then((user)=>{
+            console.log("Signup success:", user);
+            setSuccessMessage("Account created successfully! You can now log in.");
+            setUsername("");
+            setPassword("");
+            setEmail("");
+            setBirthday("");
+            if (onSignedUp) onSignedUp();
+        }).catch((err)=>{
+            console.error("Signup error:", err);
+            setErrorMessage(err.message);
         });
     };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Container), {
-        className: "d-flex justify-content-center align-items-center",
-        style: {
-            minHeight: "80vh"
-        },
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card), {
-            className: `p-4 shadow ${shake ? "shake" : ""}`,
-            style: {
-                width: "100%",
-                maxWidth: "400px"
-            },
-            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Body, {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "signup-view",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                className: "mb-4",
+                children: "Sign Up"
+            }, void 0, false, {
+                fileName: "src/components/signup-view.jsx",
+                lineNumber: 52,
+                columnNumber: 7
+            }, undefined),
+            successMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
+                variant: "success",
+                children: successMessage
+            }, void 0, false, {
+                fileName: "src/components/signup-view.jsx",
+                lineNumber: 54,
+                columnNumber: 26
+            }, undefined),
+            errorMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
+                variant: "danger",
+                children: errorMessage
+            }, void 0, false, {
+                fileName: "src/components/signup-view.jsx",
+                lineNumber: 55,
+                columnNumber: 24
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form), {
+                onSubmit: handleSubmit,
                 children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                        className: "mb-4 text-center",
-                        children: "Sign Up"
-                    }, void 0, false, {
-                        fileName: "src/components/signup-view.jsx",
-                        lineNumber: 50,
-                        columnNumber: 11
-                    }, undefined),
-                    error && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
-                        variant: "danger",
-                        children: error
-                    }, void 0, false, {
-                        fileName: "src/components/signup-view.jsx",
-                        lineNumber: 51,
-                        columnNumber: 21
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form), {
-                        onSubmit: handleSubmit,
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
+                        controlId: "signupUsername",
+                        className: "mb-3",
                         children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
-                                className: "mb-3",
-                                controlId: "signupUsername",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
-                                        children: "Username"
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 55,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
-                                        type: "text",
-                                        value: username,
-                                        onChange: (e)=>setUsername(e.target.value),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 56,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/components/signup-view.jsx",
-                                lineNumber: 54,
-                                columnNumber: 13
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
-                                className: "mb-3",
-                                controlId: "signupPassword",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
-                                        children: "Password"
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 65,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
-                                        type: "password",
-                                        value: password,
-                                        onChange: (e)=>setPassword(e.target.value),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 66,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/components/signup-view.jsx",
-                                lineNumber: 64,
-                                columnNumber: 13
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
-                                className: "mb-3",
-                                controlId: "signupEmail",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
-                                        children: "Email"
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 75,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
-                                        type: "email",
-                                        value: email,
-                                        onChange: (e)=>setEmail(e.target.value),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 76,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/components/signup-view.jsx",
-                                lineNumber: 74,
-                                columnNumber: 13
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
-                                className: "mb-3",
-                                controlId: "signupBirthday",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
-                                        children: "Birthday"
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 85,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
-                                        type: "date",
-                                        value: birthday,
-                                        onChange: (e)=>setBirthday(e.target.value)
-                                    }, void 0, false, {
-                                        fileName: "src/components/signup-view.jsx",
-                                        lineNumber: 86,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/components/signup-view.jsx",
-                                lineNumber: 84,
-                                columnNumber: 13
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
-                                variant: "success",
-                                type: "submit",
-                                className: "w-100 mb-3",
-                                disabled: isLoading,
-                                children: isLoading ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
-                                    children: [
-                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Spinner), {
-                                            as: "span",
-                                            animation: "border",
-                                            size: "sm",
-                                            role: "status",
-                                            "aria-hidden": "true"
-                                        }, void 0, false, {
-                                            fileName: "src/components/signup-view.jsx",
-                                            lineNumber: 101,
-                                            columnNumber: 19
-                                        }, undefined),
-                                        " ",
-                                        "Signing up..."
-                                    ]
-                                }, void 0, true) : "Sign Up"
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
+                                children: "Username"
                             }, void 0, false, {
                                 fileName: "src/components/signup-view.jsx",
-                                lineNumber: 93,
-                                columnNumber: 13
+                                lineNumber: 59,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
+                                type: "text",
+                                value: username,
+                                onChange: (e)=>setUsername(e.target.value),
+                                placeholder: "Enter username",
+                                required: true,
+                                autoComplete: "username"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 60,
+                                columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/signup-view.jsx",
-                        lineNumber: 53,
-                        columnNumber: 11
+                        lineNumber: 58,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
+                        controlId: "signupPassword",
+                        className: "mb-3",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
+                                children: "Password"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 71,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
+                                type: "password",
+                                value: password,
+                                onChange: (e)=>setPassword(e.target.value),
+                                placeholder: "Enter password",
+                                required: true,
+                                autoComplete: "new-password"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 72,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/signup-view.jsx",
+                        lineNumber: 70,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
+                        controlId: "signupEmail",
+                        className: "mb-3",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
+                                children: "Email"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 83,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
+                                type: "email",
+                                value: email,
+                                onChange: (e)=>setEmail(e.target.value),
+                                placeholder: "Enter email",
+                                required: true,
+                                autoComplete: "email"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 84,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/signup-view.jsx",
+                        lineNumber: 82,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
+                        controlId: "signupBirthday",
+                        className: "mb-3",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Label, {
+                                children: "Birthday"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 95,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
+                                type: "date",
+                                value: birthday,
+                                onChange: (e)=>setBirthday(e.target.value),
+                                required: true
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 96,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/signup-view.jsx",
+                        lineNumber: 94,
+                        columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "text-center",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("small", {
-                            children: [
-                                "Hai gi\xe0 un account?",
-                                " ",
-                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
-                                    variant: "link",
-                                    onClick: onSwitchToLogin,
-                                    style: {
-                                        padding: 0
-                                    },
-                                    children: "Accedi"
-                                }, void 0, false, {
-                                    fileName: "src/components/signup-view.jsx",
-                                    lineNumber: 119,
-                                    columnNumber: 15
-                                }, undefined)
-                            ]
-                        }, void 0, true, {
-                            fileName: "src/components/signup-view.jsx",
-                            lineNumber: 117,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
+                        className: "d-flex gap-2",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
+                                type: "submit",
+                                variant: "primary",
+                                children: "Sign Up"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 105,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
+                                variant: "secondary",
+                                onClick: onSwitchToLogin,
+                                children: "Back to Login"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view.jsx",
+                                lineNumber: 108,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
                         fileName: "src/components/signup-view.jsx",
-                        lineNumber: 116,
-                        columnNumber: 11
+                        lineNumber: 104,
+                        columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/signup-view.jsx",
-                lineNumber: 49,
-                columnNumber: 9
+                lineNumber: 57,
+                columnNumber: 7
             }, undefined)
-        }, void 0, false, {
-            fileName: "src/components/signup-view.jsx",
-            lineNumber: 45,
-            columnNumber: 7
-        }, undefined)
-    }, void 0, false, {
+        ]
+    }, void 0, true, {
         fileName: "src/components/signup-view.jsx",
-        lineNumber: 41,
+        lineNumber: 51,
         columnNumber: 5
     }, undefined);
 };
-_s(SignupView, "8xSQuOWLYCF98SAUFNw6AjhAZYA=");
+_s(SignupView, "r3sK3s0OoAX09EnUzGGXQRbtTKU=");
 _c = SignupView;
 var _c;
 $RefreshReg$(_c, "SignupView");
@@ -43525,7 +43521,7 @@ $RefreshReg$(_c, "SignupView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react":"jMk1U","react-bootstrap":"ctEhb"}],"a5Sdh":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","react-bootstrap":"ctEhb"}],"a5Sdh":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$f38f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$f38f.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -43542,6 +43538,7 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _reactBootstrap = require("react-bootstrap");
 var _movieCard = require("./movie-card");
 var _s = $RefreshSig$();
+const API_URL = "https://myflix-api-0vxe.onrender.com";
 const ProfileView = ({ user, token, movies, setUser })=>{
     _s();
     const [username, setUsername] = (0, _react.useState)(user.username);
@@ -43555,7 +43552,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
         e.preventDefault();
         setSuccessMessage("");
         setErrorMessage("");
-        fetch(`https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}`, {
+        fetch(`${API_URL}/users/${user.username}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -43581,7 +43578,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
     };
     const handleDeregister = ()=>{
         if (!window.confirm("Are you sure you want to delete your account?")) return;
-        fetch(`https://movie-api-2025-9f90ce074c45.herokuapp.com/users/${user.username}`, {
+        fetch(`${API_URL}/users/${user.username}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -43589,7 +43586,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
         }).then((res)=>{
             if (!res.ok) throw new Error("Delete failed");
             localStorage.clear();
-            window.location.href = "/signup"; // redirect
+            window.location.href = "/signup";
         }).catch((err)=>{
             console.error(err);
             setErrorMessage("Could not delete account.");
@@ -43603,7 +43600,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                 children: "Profile"
             }, void 0, false, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 78,
+                lineNumber: 67,
                 columnNumber: 7
             }, undefined),
             successMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
@@ -43611,7 +43608,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                 children: successMessage
             }, void 0, false, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 80,
+                lineNumber: 69,
                 columnNumber: 26
             }, undefined),
             errorMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
@@ -43619,7 +43616,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                 children: errorMessage
             }, void 0, false, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 81,
+                lineNumber: 70,
                 columnNumber: 24
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form), {
@@ -43638,7 +43635,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             children: "Username"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 87,
+                                            lineNumber: 76,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
@@ -43648,18 +43645,18 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             required: true
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 88,
+                                            lineNumber: 77,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/profile-view.jsx",
-                                    lineNumber: 86,
+                                    lineNumber: 75,
                                     columnNumber: 13
                                 }, undefined)
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 85,
+                                lineNumber: 74,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -43672,28 +43669,29 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             children: "New Password"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 99,
+                                            lineNumber: 88,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                             type: "password",
                                             value: password,
                                             onChange: (e)=>setPassword(e.target.value),
-                                            placeholder: "Leave blank to keep current"
+                                            placeholder: "Leave blank to keep current",
+                                            autoComplete: "new-password"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 100,
+                                            lineNumber: 89,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/profile-view.jsx",
-                                    lineNumber: 98,
+                                    lineNumber: 87,
                                     columnNumber: 13
                                 }, undefined)
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 97,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -43706,28 +43704,29 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             children: "Email"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 111,
+                                            lineNumber: 101,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                             type: "email",
                                             value: email,
                                             onChange: (e)=>setEmail(e.target.value),
-                                            required: true
+                                            required: true,
+                                            autoComplete: "email"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 112,
+                                            lineNumber: 102,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/profile-view.jsx",
-                                    lineNumber: 110,
+                                    lineNumber: 100,
                                     columnNumber: 13
                                 }, undefined)
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 109,
+                                lineNumber: 99,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -43740,7 +43739,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             children: "Birthday"
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 123,
+                                            lineNumber: 114,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
@@ -43749,24 +43748,24 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                             onChange: (e)=>setBirthday(e.target.value)
                                         }, void 0, false, {
                                             fileName: "src/components/profile-view.jsx",
-                                            lineNumber: 124,
+                                            lineNumber: 115,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/components/profile-view.jsx",
-                                    lineNumber: 122,
+                                    lineNumber: 113,
                                     columnNumber: 13
                                 }, undefined)
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 121,
+                                lineNumber: 112,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view.jsx",
-                        lineNumber: 84,
+                        lineNumber: 73,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -43778,7 +43777,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                 children: "Update Profile"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 134,
+                                lineNumber: 125,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -43787,19 +43786,19 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                                 children: "Delete Account"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view.jsx",
-                                lineNumber: 138,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view.jsx",
-                        lineNumber: 133,
+                        lineNumber: 124,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 83,
+                lineNumber: 72,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h4", {
@@ -43807,7 +43806,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                 children: "Favorite Movies"
             }, void 0, false, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 144,
+                lineNumber: 130,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
@@ -43816,7 +43815,7 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                     children: "No favorite movies added."
                 }, void 0, false, {
                     fileName: "src/components/profile-view.jsx",
-                    lineNumber: 147,
+                    lineNumber: 133,
                     columnNumber: 11
                 }, undefined) : favoriteMovies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
                         xs: 12,
@@ -43824,26 +43823,29 @@ const ProfileView = ({ user, token, movies, setUser })=>{
                         md: 4,
                         lg: 3,
                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
-                            movie: movie
+                            movie: movie,
+                            user: user,
+                            token: token,
+                            setUser: setUser
                         }, void 0, false, {
                             fileName: "src/components/profile-view.jsx",
-                            lineNumber: 151,
+                            lineNumber: 137,
                             columnNumber: 15
                         }, undefined)
                     }, movie._id, false, {
                         fileName: "src/components/profile-view.jsx",
-                        lineNumber: 150,
+                        lineNumber: 136,
                         columnNumber: 13
                     }, undefined))
             }, void 0, false, {
                 fileName: "src/components/profile-view.jsx",
-                lineNumber: 145,
+                lineNumber: 131,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/profile-view.jsx",
-        lineNumber: 77,
+        lineNumber: 66,
         columnNumber: 5
     }, undefined);
 };
@@ -43857,7 +43859,7 @@ $RefreshReg$(_c, "ProfileView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM","react-bootstrap":"ctEhb","./movie-card":"edT5A","react/jsx-dev-runtime":"dVPUn"}],"3WSqp":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-bootstrap":"ctEhb","./movie-card":"edT5A","react/jsx-dev-runtime":"dVPUn"}],"3WSqp":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$4cf9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$4cf9.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -43991,6 +43993,6 @@ $RefreshReg$(_c, "NavigationBar");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-bootstrap":"ctEhb","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"a3DI0","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"gCipM"}],"i5LP7":[function() {},{}],"lJZlQ":[function() {},{}]},["lljV9","gYcKb"], "gYcKb", "parcelRequire2fd1", {}, null, null, "http://localhost:1234")
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-bootstrap":"ctEhb","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"i5LP7":[function() {},{}],"lJZlQ":[function() {},{}]},["hiyDA","gYcKb"], "gYcKb", "parcelRequire2fd1", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=myFlix_client.ad93b51f.js.map

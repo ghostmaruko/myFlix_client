@@ -13,42 +13,26 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
     const method = isFavorite ? "DELETE" : "POST";
     fetch(`${API_URL}/users/${user.username}/movies/${movie._id}`, {
       method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((updatedUser) => {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
       })
-      .catch((err) => {
-        console.error("Toggle favorite error:", err);
-      });
+      .catch((err) => console.error(err));
   };
-
-  const imageUrl = movie.imageURL
-    ? movie.imageURL.startsWith("http")
-      ? movie.imageURL
-      : `${API_URL}/img/${movie.imageURL}`
-    : null;
 
   return (
     <Modal show={true} onHide={onClose} size="lg" centered>
       <Modal.Body>
         <Row>
           <Col md={5}>
-            {imageUrl ? (
-              <img src={imageUrl} alt={movie.title} style={{ width: "100%", borderRadius: "8px" }} />
-            ) : (
-              <div className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ height: "300px", borderRadius: "8px" }}>
-                Image not available
-              </div>
-            )}
+            <img
+              src={movie.imageURL?.startsWith("http") ? movie.imageURL : `${API_URL}/img/${movie.imageURL}`}
+              alt={movie.title}
+              style={{ width: "100%", borderRadius: "8px" }}
+            />
           </Col>
           <Col md={7}>
             <h3>{movie.title}</h3>
