@@ -32,16 +32,19 @@ export const MainView = () => {
     fetch(`${API_URL}/movies`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        return res.json();
+      })
       .then((data) => {
-        console.log("Fetched movies:", data); // Controlla i campi disponibili
-        const moviesWithId = data.map((movie, index) => ({
-          ...movie,
-          _id: movie._id || index.toString(),
-        }));
+        const moviesWithId = data.map((movie, index) => ({ ...movie, _id: movie._id || index.toString() }));
         setMovies(moviesWithId);
       })
-      .catch((err) => console.error("Fetch error:", err));
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        // In case of auth error, optionally clear token/user
+        // if (err.message.includes("401")) { setToken(null); setUser(null); localStorage.clear(); }
+      });
   }, [token]);
 
   const handleLogout = () => {
@@ -80,21 +83,13 @@ export const MainView = () => {
                   <Row className="g-4">
                     {filteredMovies.map((movie) => (
                       <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                        <MovieCard
-                          key={movie._id}
-                          movie={movie}
-                          user={user}
-                          token={token}
-                          setUser={setUser}
-                        />
+                        <MovieCard movie={movie} user={user} token={token} setUser={setUser} />
                       </Col>
                     ))}
                   </Row>
 
                   {filteredMovies.length === 0 && (
-                    <div className="text-center mt-3">
-                      No movies found for "{searchTerm}"
-                    </div>
+                    <div className="text-center mt-3">No movies found for "{searchTerm}"</div>
                   )}
                 </>
               )
@@ -107,10 +102,7 @@ export const MainView = () => {
               user ? (
                 <Navigate to="/" />
               ) : showSignup ? (
-                <SignupView
-                  onSignedUp={() => setShowSignup(false)}
-                  onSwitchToLogin={() => setShowSignup(false)}
-                />
+                <SignupView onSignedUp={() => setShowSignup(false)} onSwitchToLogin={() => setShowSignup(false)} />
               ) : (
                 <LoginView
                   onLoggedIn={(user, token) => {
@@ -123,19 +115,9 @@ export const MainView = () => {
             }
           />
 
-          <Route
-            path="/movies/:movieId"
-            element={!user ? <Navigate to="/login" /> : <MovieView movies={movies} />}
-          />
+          <Route path="/movies/:movieId" element={!user ? <Navigate to="/login" /> : <MovieView movies={movies} />} />
 
-          <Route
-            path="/profile"
-            element={!user ? (
-              <Navigate to="/login" />
-            ) : (
-              <ProfileView user={user} token={token} movies={movies} />
-            )}
-          />
+          <Route path="/profile" element={!user ? <Navigate to="/login" /> : <ProfileView user={user} token={token} movies={movies} setUser={setUser} />} />
         </Routes>
       </Container>
     </>

@@ -50,8 +50,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
   };
 
   const handleDeregister = () => {
-    if (!window.confirm("Are you sure you want to delete your account?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete your account?")) return;
 
     fetch(`${API_URL}/users/${user.username}`, {
       method: "DELETE",
@@ -143,12 +142,7 @@ export const ProfileView = ({ user, token, movies, setUser }) => {
         ) : (
           favoriteMovies.map((movie) => (
             <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-              <MovieCard
-                movie={movie}
-                user={user}
-                token={token}
-                setUser={setUser}
-              />
+              <MovieCard movie={movie} user={user} token={token} setUser={setUser} />
             </Col>
           ))
         )}

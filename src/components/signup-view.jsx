@@ -23,13 +23,13 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
       body: JSON.stringify({ username, password, email, birthday }),
     })
       .then((res) => {
+        setIsLoading(false);
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        setIsLoading(false);
-        onSignedUp();
-        onSwitchToLogin();
+        onSignedUp && onSignedUp();
+        onSwitchToLogin && onSwitchToLogin();
       })
       .catch((e) => {
         console.error("Signup error:", e);
@@ -40,14 +40,8 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
   };
 
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "80vh" }}
-    >
-      <Card
-        className={`p-4 shadow ${shake ? "shake" : ""}`}
-        style={{ width: "100%", maxWidth: "400px" }}
-      >
+    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
+      <Card className={`p-4 shadow ${shake ? "shake" : ""}`} style={{ width: "100%", maxWidth: "400px" }}>
         <Card.Body>
           <h2 className="mb-4 text-center">Sign Up</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -55,59 +49,28 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="signupUsername">
               <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
+              <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="signupPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="signupEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="signupBirthday">
               <Form.Label>Birthday</Form.Label>
-              <Form.Control
-                type="date"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
-              />
+              <Form.Control type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
             </Form.Group>
 
-            <Button
-              variant="success"
-              type="submit"
-              className="w-100 mb-3"
-              disabled={isLoading}
-            >
+            <Button variant="success" type="submit" className="w-100 mb-3" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />{" "}
-                  Signing up...
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> Signing up...
                 </>
               ) : (
                 "Sign Up"
@@ -118,11 +81,7 @@ export const SignupView = ({ onSignedUp, onSwitchToLogin }) => {
           <div className="text-center">
             <small>
               Hai già un account?{" "}
-              <Button
-                variant="link"
-                onClick={onSwitchToLogin}
-                style={{ padding: 0 }}
-              >
+              <Button variant="link" onClick={onSwitchToLogin} style={{ padding: 0 }}>
                 Accedi
               </Button>
             </small>

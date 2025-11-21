@@ -1,4 +1,3 @@
-// movie-modal.js
 import React from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, Row, Col } from "react-bootstrap";
@@ -19,12 +18,17 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((updatedUser) => {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error("Toggle favorite error:", err);
+      });
   };
 
   const imageUrl = movie.imageURL
@@ -39,16 +43,9 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
         <Row>
           <Col md={5}>
             {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={movie.title}
-                style={{ width: "100%", borderRadius: "8px" }}
-              />
+              <img src={imageUrl} alt={movie.title} style={{ width: "100%", borderRadius: "8px" }} />
             ) : (
-              <div
-                className="d-flex align-items-center justify-content-center bg-secondary text-white"
-                style={{ height: "300px", borderRadius: "8px" }}
-              >
+              <div className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ height: "300px", borderRadius: "8px" }}>
                 Image not available
               </div>
             )}
@@ -70,9 +67,7 @@ export const MovieModal = ({ movie, user, token, setUser, onClose }) => {
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
+        <Button variant="secondary" onClick={onClose}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
