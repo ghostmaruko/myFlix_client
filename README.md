@@ -121,8 +121,14 @@ Developed the full frontend in React, integrated JWT authentication, implemented
 
 # Screenshot
 
-** Login / Signup**
+**Login / Signup**
 ![Login View](screenshot/Login.png)
+
+**Sign Up**
 ![Sign Up](screenshot/Sign_Up.png)
+
+**Single Movie View**
 ![Single Movie View](screenshot/Single_Movie_View.png)
+
+**Profile View**
 ![Profile View](screenshot/Profile_View.png)
